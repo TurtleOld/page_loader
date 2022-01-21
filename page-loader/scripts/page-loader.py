@@ -2,7 +2,7 @@
 
 
 def main():
-    print("Success")
+    print("Load page successfully")
 
 
 if __name__ == '__main__':
