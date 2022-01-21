@@ -8,21 +8,21 @@ classifiers = [
 ]
 repository = "https://github.com/TurtleOld/python-project-lvl3"
 packages = [
-    { include = 'page-loader' },
+    { include = 'page_loader' },
 ]
 
 [tool.poetry.dependencies]
 python = "^3.9"
 requests = "^2.27.1"
-requests-mock = "^1.9.3"
 
 [tool.poetry.dev-dependencies]
 flake8 = "^4.0.1"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
+requests-mock = "^1.9.3"
 
 [tool.poetry.scripts]
-page-loader = 'page-loader.scripts.page-loader:main'
+page-loader = "page_loader.scripts.page_loader:main"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
