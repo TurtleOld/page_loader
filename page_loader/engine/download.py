@@ -8,7 +8,7 @@ CURRENT_DIRECTORY = os.getcwd()
 
 def download(url, path=CURRENT_DIRECTORY):
     link = url.replace('https://', '')
-    new_link = re.sub('\W', '-', link)
+    new_link = re.sub(r'\W', '-', link)
     file_name = f'{new_link}.html'
     request_link = requests.get(url)
     with open(os.path.join(path, file_name), 'w',
