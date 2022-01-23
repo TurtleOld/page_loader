@@ -10,8 +10,7 @@
 
 # Welcome to project "Page loader".
 
-##### _This is the third [Hexlet](https://ru.hexlet.io) platform project written
-in Python programming language_
+##### _This is the third [Hexlet](https://ru.hexlet.io) platform project written in Python programming language_
 
 ### This library allows you to download web pages
 
