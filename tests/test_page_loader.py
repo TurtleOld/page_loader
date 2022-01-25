@@ -4,13 +4,14 @@ import requests
 from requests_mock.mocker import Mocker
 
 from page_loader import download
+from page_loader.engine.change_links import change_links
 from page_loader.engine.download_content import download_images
 
 link = 'https://python.org'
 temp_dir = tempfile.TemporaryDirectory()
 file_name = download(link, temp_dir.name)
+file_name_tests = download(link, 'tests/fixtures')
 links = download_images(link, 'tests/fixtures')
-
 
 
 def test_download(requests_mock: Mocker):
@@ -22,8 +23,11 @@ def test_download(requests_mock: Mocker):
 
 
 def test_download_images():
-    paths = 'tests/fixtures/python-org_files/-static-img-python-logo.png'
-    print(links)
-    print()
-    print(paths)
-    assert paths == links
+    path = 'tests/fixtures/python-org_files/-static-img-python-logo.png'
+    assert path == links
+
+
+def test_change_links():
+    with open('tests/fixtures/python-org.html') as file_:
+        assert change_links(file_, links)
+
