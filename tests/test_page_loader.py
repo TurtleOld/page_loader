@@ -29,5 +29,5 @@ def test_download_images():
 
 def test_change_links():
     with open('tests/fixtures/python-org.html') as file_:
-        assert change_links(file_.name, links)
+        assert change_links(file_, links)
 
