@@ -4,7 +4,6 @@ import requests
 from requests_mock.mocker import Mocker
 
 from page_loader import download
-from page_loader.engine.change_links import change_links
 from page_loader.engine.download_content import download_images
 
 link = 'https://python.org'
@@ -27,7 +26,7 @@ def test_download_images():
     assert path == links
 
 
-def test_change_links():
-    with open('tests/fixtures/python-org.html') as file_:
-        assert change_links(file_, links)
+# def test_change_links():
+#     with open('tests/fixtures/python-org.html') as file_:
+#         assert change_links(file_, links)
 

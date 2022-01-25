@@ -29,4 +29,4 @@ def download_images(url, path=os.getcwd()):
         with open(os.path.join(path, folder_name, file_name), 'wb') as \
                 full_path_name:
             full_path_name.write(requests.get(f'{url}{link_img}').content)
-            return full_path_name.name
+            return os.path.join(folder_name, file_name)
