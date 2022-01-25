@@ -12,6 +12,7 @@ file_name = download(link, temp_dir.name)
 links = download_images(link, 'fixtures')
 
 
+
 def test_download(requests_mock: Mocker):
     with open(file_name, 'r', encoding='utf-8') as file2:
         data = file2.read()
@@ -21,5 +22,8 @@ def test_download(requests_mock: Mocker):
 
 
 def test_download_images():
-    paths = 'tests/fixtures/python-org_files/-static-img-python-logo.png'
+    paths = 'fixtures\\python-org_files\\-static-img-python-logo.png'
+    print(links)
+    print()
+    print(paths)
     assert paths == links
