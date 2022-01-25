@@ -9,7 +9,7 @@ from page_loader.engine.download_content import download_images
 link = 'https://python.org'
 temp_dir = tempfile.TemporaryDirectory()
 file_name = download(link, temp_dir.name)
-links = download_images(link, 'fixtures')
+links = download_images(link, 'tests/fixtures')
 
 
 
@@ -22,7 +22,7 @@ def test_download(requests_mock: Mocker):
 
 
 def test_download_images():
-    paths = 'fixtures\\python-org_files\\-static-img-python-logo.png'
+    paths = 'tests/fixtures/python-org_files/-static-img-python-logo.png'
     print(links)
     print()
     print(paths)
