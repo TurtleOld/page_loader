@@ -21,5 +21,5 @@ def test_download(requests_mock: Mocker):
 
 
 def test_download_images():
-    paths = 'fixtures\\python-org_files\\-static-img-python-logo.png'
+    paths = 'tests/fixtures/python-org_files/-static-img-python-logo.png'
     assert paths == links
