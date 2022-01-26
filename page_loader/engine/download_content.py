@@ -67,9 +67,10 @@ def download_images(url, path):
         if link[0].startswith('/'):
             with open(os.path.join(path, folder_name, link[1]), 'wb') as file_name:
                 file_name.write(requests.get(f'{url}{link[0]}').content)
-                result.append((folder_name, link[1]))
+                result.append(os.path.join(folder_name, link[1]))
         else:
             with open(os.path.join(path, folder_name, link[1]), 'wb') as file_name:
                 file_name.write(requests.get(link[0]).content)
-                result.append((folder_name, link[1]))
+                result.append(os.path.join(folder_name, link[1]))
+    print(result)
     return result
