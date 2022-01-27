@@ -49,17 +49,18 @@ def parse_tags(url: str, tag: Tag):
     return tags_url, file_name
 
 
-def prepare(url):
+def prepare(url) -> list[tuple]:
     soup = soup_parser(url)
     tags = soup.find_all('img')
     result = []
     for tag in tags:
         links = parse_tags(url, tag)
         result.append(links)
+    print(result)
     return result
 
 
-def download_images(url, path):
+def download_images(url, path) -> list:
     folder_name = create_folder(url, path)
     links = prepare(url)
     result = []
