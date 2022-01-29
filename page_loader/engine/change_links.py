@@ -6,5 +6,7 @@ def change_links(file_path, links):
         soup = BeautifulSoup(file, 'html.parser')
         tags = soup.find_all('img')
     for key, value in links.items():
-        key['src'] = value
-        print(key)
+        for tag in tags:
+            tag['src'] = value
+    soup = soup.prettify(formatter='html5')
+    print(soup)

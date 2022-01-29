@@ -75,7 +75,7 @@ def download_images(url, path) -> dict[tuple[Any, str], str]:
                               'wb') as file_name:
                         file_name.write(requests.get(f'{url}{tup[0]}').content)
                         result.append(os.path.join(folder_name, tup[1]))
-                else:
+                if tup[0].startswith('http'):
                     with open(os.path.join(path, folder_name, tup[1]),
                               'wb') as file_name:
                         file_name.write(requests.get(tup[0]).content)
