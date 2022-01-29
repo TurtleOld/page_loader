@@ -1,5 +1,6 @@
 import os
 import re
+from typing import Any
 
 import requests
 import tldextract
@@ -49,29 +50,37 @@ def parse_tags(url: str, tag: Tag):
     return tags_url, file_name
 
 
-def prepare(url) -> list[tuple]:
+def prepare(url) -> tuple[list[tuple[Any, str]], list[Any]]:
     soup = soup_parser(url)
     tags = soup.find_all('img')
-    result = []
+    list_links = []
+    list_tags = []
     for tag in tags:
         links = parse_tags(url, tag)
-        result.append(links)
-    print(result)
-    return result
+        list_links.append(links)
+        list_tags.append(tag)
+    return list_links, list_tags
 
 
-def download_images(url, path) -> list:
+def download_images(url, path) -> dict[tuple[Any, str], str]:
     folder_name = create_folder(url, path)
     links = prepare(url)
     result = []
+    result2 = []
     for link in links:
-        if link[0].startswith('/'):
-            with open(os.path.join(path, folder_name, link[1]), 'wb') as file_name:
-                file_name.write(requests.get(f'{url}{link[0]}').content)
-                result.append(os.path.join(folder_name, link[1]))
-        else:
-            with open(os.path.join(path, folder_name, link[1]), 'wb') as file_name:
-                file_name.write(requests.get(link[0]).content)
-                result.append(os.path.join(folder_name, link[1]))
-    print(result)
-    return result
+        for tup in link:
+            if isinstance(tup, tuple):
+                if tup[0].startswith('/'):
+                    with open(os.path.join(path, folder_name, tup[1]),
+                              'wb') as file_name:
+                        file_name.write(requests.get(f'{url}{tup[0]}').content)
+                        result.append(os.path.join(folder_name, tup[1]))
+                else:
+                    with open(os.path.join(path, folder_name, tup[1]),
+                              'wb') as file_name:
+                        file_name.write(requests.get(tup[0]).content)
+                        result.append(os.path.join(folder_name, tup[1]))
+            else:
+                result2.append(tup)
+
+    return dict(zip(result2, result))

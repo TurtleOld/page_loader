@@ -17,6 +17,6 @@ def download(url, path=CURRENT_DIRECTORY):
               encoding='utf-8') as result_file:
         result_file.write(request_link.text)
         links = download_images(url, path)
-        change_links(result_file, links)
+        change_links(result_file.name, links)
 
         return result_file.name
