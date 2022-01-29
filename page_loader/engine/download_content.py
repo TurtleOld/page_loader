@@ -65,22 +65,18 @@ def prepare(url) -> tuple[list[tuple[Any, str]], list[Any]]:
 def download_images(url, path) -> dict[tuple[Any, str], str]:
     folder_name = create_folder(url, path)
     links = prepare(url)
+    list_links, list_tags = links
     result = []
-    result2 = []
-    for link in links:
-        for tup in link:
-            if isinstance(tup, tuple):
-                if tup[0].startswith('/'):
-                    with open(os.path.join(path, folder_name, tup[1]),
-                              'wb') as file_name:
-                        file_name.write(requests.get(f'{url}{tup[0]}').content)
-                        result.append(os.path.join(folder_name, tup[1]))
-                if tup[0].startswith('http'):
-                    with open(os.path.join(path, folder_name, tup[1]),
-                              'wb') as file_name:
-                        file_name.write(requests.get(tup[0]).content)
-                        result.append(os.path.join(folder_name, tup[1]))
-            else:
-                result2.append(tup)
+    for link in list_links:
+        if link[0].startswith('/'):
+            with open(os.path.join(path, folder_name, link[1]),
+                      'wb') as file_name:
+                file_name.write(requests.get(f'{url}{link[0]}').content)
+                result.append(os.path.join(folder_name, link[1]))
+        else:
+            with open(os.path.join(path, folder_name, link[1]),
+                      'wb') as file_name:
+                file_name.write(requests.get(link[0]).content)
+                result.append(os.path.join(folder_name, link[1]))
 
-    return dict(zip(result2, result))
+    return dict(zip(list_tags, result))
