@@ -1,6 +1,5 @@
 import os
 import re
-from typing import Any
 
 import requests
 import tldextract
@@ -11,19 +10,6 @@ from bs4.element import Tag
 def get_new_link_format(url):
     link_without_protocol = re.sub(r'^(http|https)://', '', url)
     return re.sub(r'\W', '-', link_without_protocol)
-
-
-def get_content(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.content
-    else:
-        print(response.status_code)
-
-
-def soup_parser(url):
-    html = get_content(url)
-    return BeautifulSoup(html, 'html.parser')
 
 
 def create_folder(url, path):
@@ -42,6 +28,27 @@ def get_domain_suite(url):
     return f'{domain.subdomain}-{domain.domain}-{domain.suffix}'
 
 
+def save_to_file(path_to_file, data):
+    if isinstance(data, bytes):
+        with open(path_to_file, 'wb') as file_name:
+            file_name.write(data)
+    else:
+        with open(path_to_file, 'w', encoding='utf-8') as file_name:
+            file_name.write(data)
+
+
+def get_content(url, path):
+    response = requests.get(url)
+    new_link = get_new_link_format(url)
+    file_name = f'{new_link}.html'
+    path_to_file = os.path.join(path, file_name)
+    if response.status_code == 200:
+        save_to_file(path_to_file, response.text)
+        return path_to_file
+    else:
+        print(response.status_code)
+
+
 def parse_tags(url: str, tag: Tag):
     tags_url = tag['src']
     domain_name = get_domain_suite(url)
@@ -50,33 +57,33 @@ def parse_tags(url: str, tag: Tag):
     return tags_url, file_name
 
 
-def prepare(url) -> tuple[list[tuple[Any, str]], list[Any]]:
-    soup = soup_parser(url)
+def download_images(url, path):
+    file_content = get_content(url, path)
+    folder_name = create_folder(url, path)
+    response = requests.get(url)
+    soup = BeautifulSoup(response.text, 'html.parser')
     tags = soup.find_all('img')
     list_links = []
-    list_tags = []
+    list_path_to_images = []
+
     for tag in tags:
         links = parse_tags(url, tag)
         list_links.append(links)
-        list_tags.append(tag)
-    return list_links, list_tags
-
-
-def download_images(url, path) -> dict[tuple[Any, str], str]:
-    folder_name = create_folder(url, path)
-    links = prepare(url)
-    list_links, list_tags = links
-    result = []
     for link in list_links:
         if link[0].startswith('/'):
-            with open(os.path.join(path, folder_name, link[1]),
-                      'wb') as file_name:
-                file_name.write(requests.get(f'{url}{link[0]}').content)
-                result.append(os.path.join(folder_name, link[1]))
-        else:
-            with open(os.path.join(path, folder_name, link[1]),
-                      'wb') as file_name:
-                file_name.write(requests.get(link[0]).content)
-                result.append(os.path.join(folder_name, link[1]))
+            save_to_file(os.path.join(path, folder_name, link[1]),
+                         requests.get(f'{url}{link[0]}').content)
 
-    return dict(zip(list_tags, result))
+            list_path_to_images.append(os.path.join(folder_name, link[1]))
+        else:
+            save_to_file(os.path.join(path, folder_name, link[1]),
+                         requests.get(link[0]).content)
+
+            list_path_to_images.append(os.path.join(folder_name, link[1]))
+
+    tuple_tags_links = dict(zip(tags, list_path_to_images))
+
+    for key, value in tuple_tags_links.items():
+        key['src'] = value
+
+    save_to_file(file_content, soup.prettify(formatter='html5'))
