@@ -9,6 +9,8 @@ from bs4.element import Tag
 
 def get_new_link_format(url):
     link_without_protocol = re.sub(r'^(http|https)://', '', url)
+    if link_without_protocol.endswith('/'):
+        return re.sub(r'\W', '-', link_without_protocol[:-1])
     return re.sub(r'\W', '-', link_without_protocol)
 
 
