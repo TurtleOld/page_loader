@@ -1,15 +1,20 @@
+import os
 import tempfile
 
-from requests_mock.mocker import Mocker
+from page_loader.engine.download_content import create_folder
 
-from page_loader import download
+URL = 'https://page-loader.hexlet.repl.co/'
+template_dir = tempfile.TemporaryDirectory().name
+# file_name = download(URL, template_dir)
+# file_name_tests = download(URL, 'tests/fixtures')
+# links = download_images(URL, 'tests/fixtures')
+downloads_dir = os.path.join('tests', 'fixtures', 'downloads')
+created_dir = os.path.join(downloads_dir,
+                           'page-loader-hexlet-repl-co_files')
+# created_html_file = os.path.join(template_dir,
+#                                  'page-loader-hexlet-repl-co.html')
 
-link = 'https://python.org'
-temp_dir = tempfile.TemporaryDirectory()
-file_name = download(link, temp_dir.name)
-file_name_tests = download(link, 'tests/fixtures')
-# links = download_images(link, 'tests/fixtures')
 
-
-def test_download(requests_mock: Mocker):
-    pass
+def test_folder_creation():
+    folder = create_folder(URL, downloads_dir)
+    assert folder == created_dir
