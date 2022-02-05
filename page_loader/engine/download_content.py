@@ -27,7 +27,9 @@ def create_folder(url, path):
 
 def get_domain_suite(url):
     domain = tldextract.extract(url)
-    return f'{domain.subdomain}-{domain.domain}-{domain.suffix}'
+
+    return f'{get_new_link_format(domain.subdomain)}-{domain.domain}-' \
+           f'{domain.suffix}'
 
 
 def save_to_file(path_to_file, data):
@@ -40,15 +42,17 @@ def save_to_file(path_to_file, data):
 
 
 def get_content(url, path):
-    response = requests.get(url)
-    new_link = get_new_link_format(url)
-    file_name = f'{new_link}.html'
-    path_to_file = os.path.join(path, file_name)
-    if response.status_code == 200:
-        save_to_file(path_to_file, response.text)
-        return path_to_file
-    else:
-        print(response.status_code)
+    try:
+        response = requests.get(url)
+        new_link = get_new_link_format(url)
+        file_name = f'{new_link}.html'
+        path_to_file = os.path.join(path, file_name)
+        response.raise_for_status()
+        if response.status_code == 200:
+            save_to_file(path_to_file, response.text)
+            return path_to_file
+    except requests.exceptions.HTTPError as Error:
+        raise SystemExit(Error)
 
 
 def parse_tags(url: str, tag: Tag):
@@ -89,4 +93,4 @@ def download_images(url, path):
     for key, value in tuple_tags_links.items():
         key['src'] = value
 
-    save_to_file(file_content, soup.prettify(formatter='html5'))
+    save_to_file(file_content, soup.prettify(formatter='minimal'))
