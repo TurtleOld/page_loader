@@ -5,20 +5,21 @@ import pytest
 import requests_mock
 
 from page_loader import download
-from page_loader.engine.download_content import create_folder
+from page_loader.engine.download_content import create_folder, get_content
 
 URL = 'https://page-loader.hexlet.repl.co'
 internet_path_image = 'assets/professions/nodejs.png'
 url_image = os.path.join(URL, internet_path_image)
 
-downloads_dir = os.path.join('tests', 'fixtures', 'downloads')
+path_original = os.path.join('tests', 'fixtures', 'downloads')
+downloads_dir = os.path.join('tests', 'fixtures', 'downloads', 'changed')
 
-html_file_name = 'page-loader-hexlet-repl-co.html'
+html_file_name = os.path.join(path_original, 'page-loader-hexlet-repl-co.html')
+changed_html_file_name = 'page-loader-hexlet-repl-co.html'
 created_dir_name = 'page-loader-hexlet-repl-co_files'
 image_name = 'page-loader-hexlet-repl-co--assets-professions-nodejs.png'
 
-created_html_file = os.path.join(downloads_dir,
-                                 html_file_name)
+created_html_file = os.path.join(downloads_dir, changed_html_file_name)
 created_image = os.path.join(created_dir_name, image_name)
 
 expected_image = os.path.join(downloads_dir, created_image)
@@ -36,7 +37,7 @@ def test_folder_creation():
 
 
 @pytest.mark.parametrize('expected', [
-    html_file_name,
+    changed_html_file_name,
     created_image
 ])
 def test_download_content(expected):
@@ -50,7 +51,7 @@ def test_download_content(expected):
 
 
 @pytest.mark.parametrize('new_file, old_file', [
-    (html_file_name, created_html_file),
+    (changed_html_file_name, html_file_name),
 ])
 def test_change_html_file(new_file, old_file):
     with requests_mock.Mocker(real_http=True) as mock:
@@ -61,3 +62,6 @@ def test_change_html_file(new_file, old_file):
             assert read_file(file) != read_file(old_file)
 
 
+def test_status_code():
+    result = get_content(URL, path_original)
+    assert result == html_file_name
