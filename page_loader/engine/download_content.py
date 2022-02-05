@@ -56,7 +56,7 @@ def get_content(url, path):
 
 
 def parse_tags(url: str, tag: Tag):
-    tags_url = tag['src']
+    tags_url = tag.get('src')
     domain_name = get_domain_suite(url)
     path_name = get_new_link_format(os.path.dirname(tags_url))
     file_name = f'{domain_name}-{path_name}-{os.path.basename(tags_url)}'
@@ -80,11 +80,6 @@ def download_images(url, path):
         if link[0].startswith('/'):
             save_to_file(os.path.join(path, folder_name, link[1]),
                          requests.get(f'{url}{link[0]}').content)
-
-            list_path_to_images.append(os.path.join(folder_name, link[1]))
-        else:
-            save_to_file(os.path.join(path, folder_name, link[1]),
-                         requests.get(link[0]).content)
 
             list_path_to_images.append(os.path.join(folder_name, link[1]))
 
