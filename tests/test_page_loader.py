@@ -17,4 +17,4 @@ created_dir = os.path.join(downloads_dir,
 
 def test_folder_creation():
     folder = create_folder(URL, downloads_dir)
-    assert folder == created_dir
+    assert os.path.join(downloads_dir, folder) == created_dir
