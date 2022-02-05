@@ -71,6 +71,7 @@ def download_images(url, path):
     for tag in tags:
         links = parse_tags(url, tag)
         list_links.append(links)
+        continue
     for link in list_links:
         if link[0].startswith('/'):
             save_to_file(os.path.join(path, folder_name, link[1]),
