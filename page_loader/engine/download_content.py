@@ -6,6 +6,12 @@ import tldextract
 from bs4 import BeautifulSoup
 from bs4.element import Tag
 
+TAGS_ATTRIBUTES = {
+    'img': 'src',
+    'script': 'src',
+    'link': 'href'
+}
+
 
 def get_new_link_format(url):
     link_without_protocol = re.sub(r'^(http|https)://', '', url)
@@ -56,11 +62,17 @@ def get_content(url, path):
 
 
 def parse_tags(url: str, tag: Tag):
-    tags_url = tag.get('src')
     domain_name = get_domain_suite(url)
-    path_name = get_new_link_format(os.path.dirname(tags_url))
-    file_name = f'{domain_name}-{path_name}-{os.path.basename(tags_url)}'
-    return tags_url, file_name
+    if tag.get('src'):
+        tags_url = tag.get('src')
+        path_name = get_new_link_format(os.path.dirname(tags_url))
+        file_name = f'{domain_name}-{path_name}-{os.path.basename(tags_url)}'
+        return tags_url, file_name
+    if tag.get('href'):
+        tags_url = tag.get('href')
+        path_name = get_new_link_format(os.path.dirname(tags_url))
+        file_name = f'{domain_name}-{path_name}-{os.path.basename(tags_url)}'
+        return tags_url, file_name
 
 
 def download_images(url, path):
@@ -68,7 +80,8 @@ def download_images(url, path):
     folder_name = create_folder(url, path)
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
-    tags = soup.find_all('img')
+    tags = soup.findAll(['script', 'img', 'link'])
+
     list_links = []
     list_path_to_images = []
 
@@ -77,15 +90,17 @@ def download_images(url, path):
         list_links.append(links)
 
     for link in list_links:
-        if link[0].startswith('/'):
-            save_to_file(os.path.join(path, folder_name, link[1]),
-                         requests.get(f'{url}{link[0]}').content)
+        if link is not None:
+            if link[0].startswith('/'):
+                save_to_file(os.path.join(path, folder_name, link[1]),
+                             requests.get(f'{url}{link[0]}').content)
 
-            list_path_to_images.append(os.path.join(folder_name, link[1]))
+                list_path_to_images.append(os.path.join(folder_name, link[1]))
 
     tuple_tags_links = dict(zip(tags, list_path_to_images))
 
     for key, value in tuple_tags_links.items():
         key['src'] = value
+        key['href'] = value
 
-    save_to_file(file_content, soup.prettify(formatter='minimal'))
+    save_to_file(file_content, soup.prettify(formatter='html5'))
