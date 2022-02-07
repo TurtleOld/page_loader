@@ -60,9 +60,8 @@ def test_download_content(expected):
         mock.get(url_css, content=read_file(expected_css))
         mock.get(url_js, content=read_file(expected_js))
         with tempfile.TemporaryDirectory() as directory:
-            download(URL, directory)
-            expected_path = os.path.join(directory, expected)
-            assert os.path.exists(expected_path)
+            assert download(URL, directory) == \
+                   os.path.join(directory, changed_html_file_name)
 
 
 @pytest.mark.parametrize('new_file, old_file', [
