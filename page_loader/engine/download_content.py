@@ -59,7 +59,7 @@ def get_content(url, path):
         raise SystemExit(Error)
 
 
-def download_images(url, path):
+def download_content(url, path):
     file_content = get_content(url, path)
 
     def get_link_to_file(search_tag, attribute):
@@ -87,7 +87,7 @@ def download_images(url, path):
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
 
-    for tag, attr in TAGS_ATTRIBUTES.items():
-        get_link_to_file(tag, attr)
+    for tag_name, attr in TAGS_ATTRIBUTES.items():
+        get_link_to_file(tag_name, attr)
 
     save_to_file(file_content, soup.prettify(formatter='minimal'))
