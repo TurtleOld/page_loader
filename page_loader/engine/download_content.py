@@ -71,7 +71,8 @@ def download_content(url, path):
         for tag in tags:
             try:
                 if tag[attribute].startswith('/') and \
-                        not tag[attribute].startswith('//'):
+                        not tag[attribute].startswith('//')\
+                        and tag[attr].endswith(('png', 'jpg', 'js', 'css')):
                     path_name = \
                         get_new_link_format(os.path.dirname(tag[attribute]))
                     file_name = f'{domain_name}-{path_name}-' \
