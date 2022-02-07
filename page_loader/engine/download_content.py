@@ -62,7 +62,7 @@ def get_content(url, path):
 def download_images(url, path):
     file_content = get_content(url, path)
 
-    def test(search_tag, attribute):
+    def get_link_to_file(search_tag, attribute):
 
         tags = soup.find_all(search_tag)
         domain_name = get_domain_suite(url)
@@ -88,6 +88,6 @@ def download_images(url, path):
     soup = BeautifulSoup(response.text, 'html.parser')
 
     for tag, attr in TAGS_ATTRIBUTES.items():
-        test(tag, attr)
+        get_link_to_file(tag, attr)
 
     save_to_file(file_content, soup.prettify(formatter='minimal'))
