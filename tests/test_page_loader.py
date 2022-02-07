@@ -50,15 +50,15 @@ def test_folder_creation():
 @pytest.mark.parametrize('expected', [
     changed_html_file_name,
     created_image,
-    created_css,
-    created_js
+    # created_css,
+    # created_js
 ])
 def test_download_content(expected):
     with requests_mock.Mocker(real_http=True) as mock:
         mock.get(URL, content=read_file(created_html_file))
         mock.get(url_image, content=read_file(expected_image))
-        mock.get(url_css, content=read_file(expected_css))
-        mock.get(url_js, content=read_file(expected_js))
+        # mock.get(url_css, content=read_file(expected_css))
+        # mock.get(url_js, content=read_file(expected_js))
         with tempfile.TemporaryDirectory() as directory:
             download(URL, directory)
             expected_path = os.path.join(directory, expected)
@@ -77,6 +77,6 @@ def test_change_html_file(new_file, old_file):
             assert read_file(file) != read_file(old_file)
 
 
-def test_status_code():
+def test_get_content():
     result = get_content(URL, path_original)
     assert result == html_file_name
