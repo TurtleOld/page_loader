@@ -4,7 +4,6 @@ import re
 import requests
 import tldextract
 from bs4 import BeautifulSoup
-from bs4.element import Tag
 
 TAGS_ATTRIBUTES = {
     'img': 'src',
@@ -53,7 +52,6 @@ def get_content(url, path):
         new_link = get_new_link_format(url)
         file_name = f'{new_link}.html'
         path_to_file = os.path.join(path, file_name)
-        response.raise_for_status()
         if response.status_code == 200:
             save_to_file(path_to_file, response.text)
             return path_to_file
@@ -61,46 +59,35 @@ def get_content(url, path):
         raise SystemExit(Error)
 
 
-def parse_tags(url: str, tag: Tag):
-    domain_name = get_domain_suite(url)
-    if tag.get('src'):
-        tags_url = tag.get('src')
-        path_name = get_new_link_format(os.path.dirname(tags_url))
-        file_name = f'{domain_name}-{path_name}-{os.path.basename(tags_url)}'
-        return tags_url, file_name
-    if tag.get('href'):
-        tags_url = tag.get('href')
-        path_name = get_new_link_format(os.path.dirname(tags_url))
-        file_name = f'{domain_name}-{path_name}-{os.path.basename(tags_url)}'
-        return tags_url, file_name
-
-
 def download_images(url, path):
     file_content = get_content(url, path)
-    folder_name = create_folder(url, path)
+
+    def test(search_tag, attribute):
+
+        tags = soup.find_all(search_tag)
+        domain_name = get_domain_suite(url)
+        folder_name = create_folder(url, path)
+
+        for tag in tags:
+            try:
+                if tag[attribute].startswith('/') and \
+                        not tag[attribute].startswith('//'):
+                    path_name = \
+                        get_new_link_format(os.path.dirname(tag[attribute]))
+                    file_name = f'{domain_name}-{path_name}-' \
+                                f'{os.path.basename(tag[attribute])}'
+
+                    save_to_file(os.path.join(path, folder_name, file_name),
+                                 requests.get(f'{url}{tag[attribute]}').content)
+
+                    tag[attribute] = os.path.join(folder_name, file_name)
+            except KeyError:
+                continue
+
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
-    tags = soup.findAll(['script', 'img', 'link'])
 
-    list_links = []
-    list_path_to_images = []
+    for tag, attr in TAGS_ATTRIBUTES.items():
+        test(tag, attr)
 
-    for tag in tags:
-        links = parse_tags(url, tag)
-        list_links.append(links)
-
-    for link in list_links:
-        if link is not None:
-            if link[0].startswith('/'):
-                save_to_file(os.path.join(path, folder_name, link[1]),
-                             requests.get(f'{url}{link[0]}').content)
-
-                list_path_to_images.append(os.path.join(folder_name, link[1]))
-
-    tuple_tags_links = dict(zip(tags, list_path_to_images))
-
-    for key, value in tuple_tags_links.items():
-        key['src'] = value
-        key['href'] = value
-
-    save_to_file(file_content, soup.prettify(formatter='html5'))
+    save_to_file(file_content, soup.prettify(formatter='minimal'))
