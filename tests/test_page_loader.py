@@ -25,7 +25,6 @@ image_name = 'page-loader-hexlet-repl-co--assets-professions-nodejs.png'
 css_name = 'page-loader-hexlet-repl-co--assets-application.css'
 js_name = 'page-loader-hexlet-repl-co--script.js'
 
-
 created_html_file = os.path.join(downloads_dir, changed_html_file_name)
 created_image = os.path.join(created_dir_name, image_name)
 created_css = os.path.join(created_dir_name, css_name)
@@ -49,9 +48,10 @@ def test_folder_creation():
 
 @pytest.mark.parametrize('expected', [
     changed_html_file_name,
-    created_image,
-    created_css,
-    created_js
+    created_dir_name,
+    # created_image,
+    # created_css,
+    # created_js
 ])
 def test_download_content(expected):
     with requests_mock.Mocker(real_http=True) as mock:
@@ -60,8 +60,9 @@ def test_download_content(expected):
         mock.get(url_css, content=read_file(expected_css))
         mock.get(url_js, content=read_file(expected_js))
         with tempfile.TemporaryDirectory() as directory:
-            assert download(URL, directory) == \
-                   os.path.join(directory, changed_html_file_name)
+            download(URL, directory)
+            expected_path = os.path.join(directory, expected)
+            assert os.path.exists(expected_path)
 
 
 @pytest.mark.parametrize('new_file, old_file', [
@@ -72,8 +73,8 @@ def test_change_html_file(new_file, old_file):
         mock.get(URL, content=read_file(created_html_file))
         with tempfile.TemporaryDirectory() as directory:
             download(URL, directory)
-            file = os.path.join(directory, new_file)
-            assert read_file(file) != read_file(old_file)
+            new_file = os.path.join(directory, new_file)
+            assert read_file(new_file) != read_file(old_file)
 
 
 def test_get_content():
