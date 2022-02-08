@@ -1,13 +1,17 @@
 import os
 import tempfile
+from http import HTTPStatus
 
 import pytest
+import requests
 import requests_mock
 
 from page_loader import download
-from page_loader.engine.download_content import create_folder, get_content
+from page_loader.engine.download_content import create_folder, get_html_file, \
+    get_content
 
 URL = 'https://page-loader.hexlet.repl.co'
+error_url = 'https://page-loader.hexlet.repl.ce'
 internet_path_image = 'assets/professions/nodejs.png'
 internet_path_css = 'assets/application.css'
 internet_path_js = 'script.js'
@@ -23,7 +27,7 @@ changed_html_file_name = 'page-loader-hexlet-repl-co.html'
 created_dir_name = 'page-loader-hexlet-repl-co_files'
 image_name = 'page-loader-hexlet-repl-co--assets-professions-nodejs.png'
 css_name = 'page-loader-hexlet-repl-co--assets-application.css'
-js_name = 'page-loader-hexlet-repl-co--script.js'
+js_name = 'page-loader-hexlet-repl-co---script.js'
 
 created_html_file = os.path.join(downloads_dir, changed_html_file_name)
 created_image = os.path.join(created_dir_name, image_name)
@@ -77,6 +81,23 @@ def test_change_html_file(new_file, old_file):
             assert read_file(new_file) != read_file(old_file)
 
 
-def test_get_content():
-    result = get_content(URL, path_original)
+def test_get_html_file():
+    result = get_html_file(URL, path_original)
     assert result == html_file_name
+
+
+def test_download_with_errors():
+    with tempfile.TemporaryDirectory() as tempdir:
+        with requests_mock.Mocker() as mock:
+            mock.get(URL, status_code=HTTPStatus.NOT_FOUND)
+            assert not os.listdir(tempdir)
+            with pytest.raises(requests.RequestException):
+                download(URL, tempdir)
+            assert not os.listdir(tempdir)
+
+
+def test_get_content():
+    try:
+        get_content(URL)
+    except Exception as exc:
+        pytest.fail(exc, pytrace=True)
