@@ -1,5 +1,7 @@
+import logging
 import os
 import re
+import sys
 from urllib.parse import urlparse
 
 import requests
@@ -10,6 +12,8 @@ TAGS_ATTRIBUTES = {
     'script': 'src',
     'link': 'href'
 }
+
+log = logging.getLogger(__name__)
 
 
 def get_new_link_format(url):
@@ -24,7 +28,11 @@ def create_folder(url, path):
     full_path = os.path.join(path, folder_name)
 
     if not os.path.isdir(full_path):
-        os.mkdir(full_path)
+        try:
+            os.mkdir(full_path)
+        except IOError:
+            log.error(f'Failed to create folder {folder_name}')
+            sys.exit(1)
 
     return folder_name
 
@@ -38,21 +46,29 @@ def save_to_file(path_to_file, data):
             file_name.write(data)
 
 
-def get_content(url, path):
+def get_content(url):
     try:
         response = requests.get(url)
-        new_link = get_new_link_format(url)
-        file_name = f'{new_link}.html'
-        path_to_file = os.path.join(path, file_name)
-        if response.status_code == 200:
-            save_to_file(path_to_file, response.text)
-            return path_to_file
-    except requests.exceptions.HTTPError as Error:
-        raise SystemExit(Error)
+        response.raise_for_status()
+        return response.text
+
+    except requests.exceptions.ConnectionError:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Check the correctness of the entered link!')
+        sys.exit(1)
+
+
+def get_html_file(url, path):
+    response = get_content(url)
+    new_link = get_new_link_format(url)
+    file_name = f'{new_link}.html'
+    path_to_file = os.path.join(path, file_name)
+    save_to_file(path_to_file, response)
+    return path_to_file
 
 
 def download_content(url, path):
-    file_content = get_content(url, path)
+    file_content = get_html_file(url, path)
 
     def get_link_to_file(search_tag, attribute):
 
@@ -62,8 +78,9 @@ def download_content(url, path):
 
         for tag in tags:
             try:
+                log.info(f'Link download {url}{tag[attr]}')
                 if tag[attribute].startswith('/') and \
-                        not tag[attribute].startswith('//')\
+                        not tag[attribute].startswith('//') \
                         and tag[attr].endswith(('png', 'jpg', 'js', 'css')):
                     path_name = \
                         get_new_link_format(os.path.dirname(tag[attribute]))
