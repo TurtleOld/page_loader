@@ -1,8 +1,8 @@
 import os
 import re
+from urllib.parse import urlparse
 
 import requests
-import tldextract
 from bs4 import BeautifulSoup
 
 TAGS_ATTRIBUTES = {
@@ -13,10 +13,9 @@ TAGS_ATTRIBUTES = {
 
 
 def get_new_link_format(url):
-    link_without_protocol = re.sub(r'^(http|https)://', '', url)
-    if link_without_protocol.endswith('/'):
-        return re.sub(r'\W', '-', link_without_protocol[:-1])
-    return re.sub(r'\W', '-', link_without_protocol)
+    preparation = urlparse(url)
+    new_link = re.sub(r'\W', '-', f'{preparation.netloc}{preparation.path}')
+    return new_link
 
 
 def create_folder(url, path):
@@ -28,13 +27,6 @@ def create_folder(url, path):
         os.mkdir(full_path)
 
     return folder_name
-
-
-def get_domain_suite(url):
-    domain = tldextract.extract(url)
-
-    return f'{get_new_link_format(domain.subdomain)}-{domain.domain}-' \
-           f'{domain.suffix}'
 
 
 def save_to_file(path_to_file, data):
@@ -65,7 +57,7 @@ def download_content(url, path):
     def get_link_to_file(search_tag, attribute):
 
         tags = soup.find_all(search_tag)
-        domain_name = get_domain_suite(url)
+        domain_name = get_new_link_format(url)
         folder_name = create_folder(url, path)
 
         for tag in tags:
