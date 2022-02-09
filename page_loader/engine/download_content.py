@@ -1,10 +1,11 @@
 import logging
 import os
 import re
-import sys
+import socket
 from urllib.parse import urlparse
 
 import requests
+import urllib3.exceptions
 from bs4 import BeautifulSoup
 from progress.bar import IncrementalBar
 
@@ -33,7 +34,7 @@ def create_folder(url, path):
             os.mkdir(full_path)
         except IOError:
             log.error(f'Failed to create folder {folder_name}')
-            sys.exit(1)
+            raise
 
     return folder_name
 
@@ -49,19 +50,32 @@ def save_to_file(path_to_file, data):
     except PermissionError:
         log.error(f'Permission denied to the specified directory '
                   f'{path_to_file}')
-        sys.exit(1)
+    except TypeError:
+        pass
 
 
 def get_content(url):
     try:
         response = requests.get(url)
         response.raise_for_status()
-        return response.text
 
     except requests.exceptions.ConnectionError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
-        sys.exit(1)
+    except urllib3.exceptions.MaxRetryError:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Check the correctness of the entered link!')
+    except urllib3.exceptions.NewConnectionError:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Check the correctness of the entered link!')
+    except urllib3.exceptions.HTTPError:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Check the correctness of the entered link!')
+    except socket.gaierror:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Check the correctness of the entered link! ')
+    else:
+        return response.text
 
 
 def get_html_file(url, path):
@@ -97,7 +111,6 @@ def download_content(url, path):
         bar = IncrementalBar('Download', max=len(result),
                              suffix='%(percent).1f%%')
         for tg in result:
-
             bar.next()
             path_name = \
                 get_new_link_format(os.path.dirname(tg[attribute]))
@@ -111,10 +124,15 @@ def download_content(url, path):
 
         bar.finish()
 
-    response = requests.get(url)
-    soup = BeautifulSoup(response.text, 'html.parser')
+    try:
+        response = get_content(url)
+        soup = BeautifulSoup(response, 'html.parser')
+        for tag_name, attr in TAGS_ATTRIBUTES.items():
+            get_link_to_file(tag_name, attr)
+        save_to_file(file_content, soup.prettify(formatter='minimal'))
+    except TypeError:
+        pass
 
-    for tag_name, attr in TAGS_ATTRIBUTES.items():
-        get_link_to_file(tag_name, attr)
 
-    save_to_file(file_content, soup.prettify(formatter='minimal'))
+
+
