@@ -57,6 +57,9 @@ def get_content(url):
         response = requests.get(url)
         response.raise_for_status()
 
+    except requests.exceptions.HTTPError:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Check the correctness of the entered link!')
     except requests.exceptions.ConnectionError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
