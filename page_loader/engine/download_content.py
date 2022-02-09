@@ -74,7 +74,7 @@ def get_content(url):
                   f'Check the correctness of the entered link! ')
         raise
     else:
-        return response.text
+        return response.content
 
 
 def get_html_file(url, path):
