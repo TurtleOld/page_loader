@@ -135,7 +135,3 @@ def download_content(url, path):
     except TypeError:
         pass
         raise
-
-
-
-
