@@ -44,3 +44,6 @@
 ### The first step of project
 
 [![asciicast](https://asciinema.org/a/463676.svg)](https://asciinema.org/a/463676)
+
+В случае ошибок в написании пути или ссылки будут выводиться соответствующие предупреждения:
+[![asciicast](https://asciinema.org/a/467761.svg)](https://asciinema.org/a/467761)
