@@ -74,7 +74,7 @@ def get_content(url):
                   f'Check the correctness of the entered link! ')
         raise
     else:
-        return response.content
+        return response.text
 
 
 def get_html_file(url, path):
@@ -121,7 +121,7 @@ def download_content(url, path):
                         f'{os.path.basename(tg[attribute])}'
 
             save_to_file(os.path.join(path, folder_name, file_name),
-                         requests.get(f'{url}{tg[attribute]}').content)
+                         get_content(f'{url}{tg[attribute]}'))
 
             tg[attribute] = os.path.join(folder_name, file_name)
 
