@@ -11,32 +11,31 @@ from page_loader.engine.download_content import create_folder, get_html_file, \
     get_content
 
 URL = 'https://page-loader.hexlet.repl.co'
-error_url = 'https://page-loader.hexlet.repl.ce'
-internet_path_image = 'assets/professions/nodejs.png'
-internet_path_css = 'assets/application.css'
-internet_path_js = 'script.js'
-url_image = os.path.join(URL, internet_path_image)
-url_css = os.path.join(URL, internet_path_css)
-url_js = os.path.join(URL, internet_path_js)
+INTERNET_PATH_IMAGE = 'assets/professions/nodejs.png'
+INTERNET_PATH_CSS = 'assets/application.css'
+INTERNET_PATH_JS = 'script.js'
+URL_IMAGE = os.path.join(URL, INTERNET_PATH_IMAGE)
+URL_CSS = os.path.join(URL, INTERNET_PATH_CSS)
+URL_JS = os.path.join(URL, INTERNET_PATH_JS)
 
-path_original = os.path.join('tests', 'fixtures', 'downloads')
-downloads_dir = os.path.join('tests', 'fixtures', 'downloads', 'changed')
+PATH_ORIGINAL = os.path.join('tests', 'fixtures', 'downloads')
+DOWNLOADS_DIR = os.path.join('tests', 'fixtures', 'downloads', 'changed')
 
-html_file_name = os.path.join(path_original, 'page-loader-hexlet-repl-co.html')
-changed_html_file_name = 'page-loader-hexlet-repl-co.html'
-created_dir_name = 'page-loader-hexlet-repl-co_files'
-image_name = 'page-loader-hexlet-repl-co--assets-professions-nodejs.png'
-css_name = 'page-loader-hexlet-repl-co--assets-application.css'
-js_name = 'page-loader-hexlet-repl-co---script.js'
+HTML_FILE_NAME = os.path.join(PATH_ORIGINAL, 'page-loader-hexlet-repl-co.html')
+CHANGED_HTML_FILE_NAME = 'page-loader-hexlet-repl-co.html'
+CREATED_DIR_NAME = 'page-loader-hexlet-repl-co_files'
+IMAGE_NAME = 'page-loader-hexlet-repl-co--assets-professions-nodejs.png'
+CSS_NAME = 'page-loader-hexlet-repl-co--assets-application.css'
+JS_NAME = 'page-loader-hexlet-repl-co---script.js'
 
-created_html_file = os.path.join(downloads_dir, changed_html_file_name)
-created_image = os.path.join(created_dir_name, image_name)
-created_css = os.path.join(created_dir_name, css_name)
-created_js = os.path.join(created_dir_name, js_name)
+CREATED_HTML_FILE = os.path.join(DOWNLOADS_DIR, CHANGED_HTML_FILE_NAME)
+CREATED_IMAGE = os.path.join(CREATED_DIR_NAME, IMAGE_NAME)
+CREATED_CSS = os.path.join(CREATED_DIR_NAME, CSS_NAME)
+CREATED_JS = os.path.join(CREATED_DIR_NAME, JS_NAME)
 
-expected_image = os.path.join(downloads_dir, created_image)
-expected_css = os.path.join(downloads_dir, created_css)
-expected_js = os.path.join(downloads_dir, created_js)
+EXPECTED_IMAGE = os.path.join(DOWNLOADS_DIR, CREATED_IMAGE)
+EXPECTED_CSS = os.path.join(DOWNLOADS_DIR, CREATED_CSS)
+EXPECTED_JS = os.path.join(DOWNLOADS_DIR, CREATED_JS)
 
 
 def read_file(file):
@@ -45,24 +44,24 @@ def read_file(file):
 
 
 def test_folder_creation():
-    folder = create_folder(URL, downloads_dir)
-    assert os.path.join(downloads_dir, folder) == os.path.join(downloads_dir,
-                                                               created_dir_name)
+    folder = create_folder(URL, DOWNLOADS_DIR)
+    assert os.path.join(DOWNLOADS_DIR, folder) == os.path.join(DOWNLOADS_DIR,
+                                                               CREATED_DIR_NAME)
 
 
 @pytest.mark.parametrize('expected', [
-    changed_html_file_name,
-    created_dir_name,
-    created_image,
-    created_css,
-    created_js
+    CHANGED_HTML_FILE_NAME,
+    CREATED_DIR_NAME,
+    CREATED_IMAGE,
+    CREATED_CSS,
+    CREATED_JS
 ])
 def test_download_content(expected):
     with requests_mock.Mocker(real_http=True) as mock:
-        mock.get(URL, content=read_file(created_html_file))
-        mock.get(url_image, content=read_file(expected_image))
-        mock.get(url_css, content=read_file(expected_css))
-        mock.get(url_js, content=read_file(expected_js))
+        mock.get(URL, content=read_file(CREATED_HTML_FILE))
+        mock.get(URL_IMAGE, content=read_file(EXPECTED_IMAGE))
+        mock.get(URL_CSS, content=read_file(EXPECTED_CSS))
+        mock.get(URL_JS, content=read_file(EXPECTED_JS))
         with tempfile.TemporaryDirectory() as directory:
             download(URL, directory)
             expected_path = os.path.join(directory, expected)
@@ -70,11 +69,11 @@ def test_download_content(expected):
 
 
 @pytest.mark.parametrize('new_file, old_file', [
-    (changed_html_file_name, html_file_name),
+    (CHANGED_HTML_FILE_NAME, HTML_FILE_NAME),
 ])
 def test_change_html_file(new_file, old_file):
     with requests_mock.Mocker(real_http=True) as mock:
-        mock.get(URL, content=read_file(created_html_file))
+        mock.get(URL, content=read_file(CREATED_HTML_FILE))
         with tempfile.TemporaryDirectory() as directory:
             download(URL, directory)
             new_file = os.path.join(directory, new_file)
@@ -82,8 +81,8 @@ def test_change_html_file(new_file, old_file):
 
 
 def test_get_html_file():
-    result = get_html_file(URL, path_original)
-    assert result == html_file_name
+    result = get_html_file(URL, PATH_ORIGINAL)
+    assert result == HTML_FILE_NAME
 
 
 def test_download_with_errors():
