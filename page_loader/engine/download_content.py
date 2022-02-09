@@ -39,12 +39,17 @@ def create_folder(url, path):
 
 
 def save_to_file(path_to_file, data):
-    if isinstance(data, bytes):
-        with open(path_to_file, 'wb') as file_name:
-            file_name.write(data)
-    else:
-        with open(path_to_file, 'w', encoding='utf-8') as file_name:
-            file_name.write(data)
+    try:
+        if isinstance(data, bytes):
+            with open(path_to_file, 'wb') as file_name:
+                file_name.write(data)
+        else:
+            with open(path_to_file, 'w', encoding='utf-8') as file_name:
+                file_name.write(data)
+    except PermissionError:
+        log.error(f'Permission denied to the specified directory '
+                  f'{path_to_file}')
+        sys.exit(1)
 
 
 def get_content(url):
