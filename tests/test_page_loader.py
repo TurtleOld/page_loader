@@ -1,9 +1,7 @@
 import os
 import tempfile
-from http import HTTPStatus
 
 import pytest
-import requests
 import requests_mock
 
 from page_loader import download
@@ -86,31 +84,8 @@ def test_get_html_file():
     assert result == HTML_FILE_NAME
 
 
-def test_download_with_errors():
-    with tempfile.TemporaryDirectory() as tempdir:
-        with requests_mock.Mocker() as mock:
-            mock.get(URL, status_code=HTTPStatus.NOT_FOUND)
-            assert not os.listdir(tempdir)
-            with pytest.raises(requests.RequestException):
-                download(URL, tempdir)
-            assert not os.listdir(tempdir)
-
-
 def test_get_content():
     try:
         get_content(URL)
     except Exception as exc:
         pytest.fail(exc, pytrace=True)
-
-
-def test_connection_error(requests_mock):
-    invalid_url = 'https://badsite.com'
-    requests_mock.get(invalid_url, exc=requests.exceptions.ConnectionError)
-   
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        assert not os.listdir(tmpdirname)
-   
-        with pytest.raises(Exception):
-            assert download(invalid_url, tmpdirname)
-
-        assert not os.listdir(tmpdirname)

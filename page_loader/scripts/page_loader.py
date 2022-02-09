@@ -22,9 +22,6 @@ def main():
         log.info(f"Page was successfully downloaded into '{file_path}'")
     except FileNotFoundError:
         log.error(f'ERROR: No such directory: {args.output}')
-    except Exception:
-        pass
-        raise
 
 
 if __name__ == '__main__':

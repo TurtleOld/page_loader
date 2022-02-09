@@ -50,6 +50,7 @@ def save_to_file(path_to_file, data):
     except PermissionError:
         log.error(f'Permission denied to the specified directory '
                   f'{path_to_file}')
+        raise
 
 
 def get_content(url):
@@ -61,6 +62,9 @@ def get_content(url):
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
     except requests.exceptions.ConnectionError:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Check the correctness of the entered link!')
+    except requests.RequestException:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
     except urllib3.exceptions.MaxRetryError:
