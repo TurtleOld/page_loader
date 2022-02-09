@@ -52,6 +52,7 @@ def save_to_file(path_to_file, data):
                   f'{path_to_file}')
     except TypeError:
         pass
+        raise
 
 
 def get_content(url):
@@ -74,6 +75,7 @@ def get_content(url):
     except socket.gaierror:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link! ')
+        raise
     else:
         return response.text
 
@@ -132,6 +134,7 @@ def download_content(url, path):
         save_to_file(file_content, soup.prettify(formatter='minimal'))
     except TypeError:
         pass
+        raise
 
 
 

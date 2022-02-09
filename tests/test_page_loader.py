@@ -5,13 +5,13 @@ from http import HTTPStatus
 import pytest
 import requests
 import requests_mock
-from requests_mock import Mocker
 
 from page_loader import download
 from page_loader.engine.download_content import create_folder, get_html_file, \
     get_content
 
 URL = 'https://page-loader.hexlet.repl.co'
+INVALID_URL = 'https://badsite.com'
 INTERNET_PATH_IMAGE = 'assets/professions/nodejs.png'
 INTERNET_PATH_CSS = 'assets/application.css'
 INTERNET_PATH_JS = 'script.js'
@@ -94,15 +94,6 @@ def test_download_with_errors():
             with pytest.raises(requests.RequestException):
                 download(URL, tempdir)
             assert not os.listdir(tempdir)
-
-
-def test_connection_error(requests_mock: Mocker):
-    invalid_url = 'https://badsite.com'
-    requests_mock.get(invalid_url, exc=requests.exceptions.ConnectionError)
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        assert not os.listdir(tmpdirname)
-    with pytest.raises(Exception):
-        assert download(invalid_url, tmpdirname)
 
 
 def test_get_content():
