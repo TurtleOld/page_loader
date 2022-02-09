@@ -50,9 +50,6 @@ def save_to_file(path_to_file, data):
     except PermissionError:
         log.error(f'Permission denied to the specified directory '
                   f'{path_to_file}')
-    except TypeError:
-        pass
-        raise
 
 
 def get_content(url):
@@ -81,12 +78,16 @@ def get_content(url):
 
 
 def get_html_file(url, path):
+
     response = get_content(url)
-    new_link = get_new_link_format(url)
-    file_name = f'{new_link}.html'
-    path_to_file = os.path.join(path, file_name)
-    save_to_file(path_to_file, response)
-    return path_to_file
+
+    if response:
+        new_link = get_new_link_format(url)
+        file_name = f'{new_link}.html'
+        path_to_file = os.path.join(path, file_name)
+        save_to_file(path_to_file, response)
+
+        return path_to_file
 
 
 def download_content(url, path):
@@ -126,12 +127,10 @@ def download_content(url, path):
 
         bar.finish()
 
-    try:
-        response = get_content(url)
-        soup = BeautifulSoup(response, 'html.parser')
-        for tag_name, attr in TAGS_ATTRIBUTES.items():
-            get_link_to_file(tag_name, attr)
-        save_to_file(file_content, soup.prettify(formatter='minimal'))
-    except TypeError:
-        pass
-        raise
+    response = get_content(url)
+    soup = BeautifulSoup(response, 'html.parser')
+
+    for tag_name, attr in TAGS_ATTRIBUTES.items():
+        get_link_to_file(tag_name, attr)
+
+    save_to_file(file_content, soup.prettify(formatter='minimal'))

@@ -101,3 +101,16 @@ def test_get_content():
         get_content(URL)
     except Exception as exc:
         pytest.fail(exc, pytrace=True)
+
+
+def test_connection_error(requests_mock):
+    invalid_url = 'https://badsite.com'
+    requests_mock.get(invalid_url, exc=requests.exceptions.ConnectionError)
+   
+    with tempfile.TemporaryDirectory() as tmpdirname:
+        assert not os.listdir(tmpdirname)
+   
+        with pytest.raises(Exception):
+            assert download(invalid_url, tmpdirname)
+
+        assert not os.listdir(tmpdirname)
