@@ -6,6 +6,7 @@ from urllib.parse import urlparse
 
 import requests
 from bs4 import BeautifulSoup
+from progress.bar import IncrementalBar
 
 TAGS_ATTRIBUTES = {
     'img': 'src',
@@ -75,24 +76,34 @@ def download_content(url, path):
         tags = soup.find_all(search_tag)
         domain_name = get_new_link_format(url)
         folder_name = create_folder(url, path)
+        result = []
 
         for tag in tags:
             try:
-                log.info(f'Link download {url}{tag[attr]}')
+                #
                 if tag[attribute].startswith('/') and \
                         not tag[attribute].startswith('//') \
                         and tag[attr].endswith(('png', 'jpg', 'js', 'css')):
-                    path_name = \
-                        get_new_link_format(os.path.dirname(tag[attribute]))
-                    file_name = f'{domain_name}-{path_name}-' \
-                                f'{os.path.basename(tag[attribute])}'
+                    result.append(tag)
 
-                    save_to_file(os.path.join(path, folder_name, file_name),
-                                 requests.get(f'{url}{tag[attribute]}').content)
-
-                    tag[attribute] = os.path.join(folder_name, file_name)
             except KeyError:
                 continue
+
+        bar = IncrementalBar('Download', max=len(result),
+                             suffix='%(percent).1f%%')
+        for tg in result:
+            bar.next()
+            path_name = \
+                get_new_link_format(os.path.dirname(tg[attribute]))
+            file_name = f'{domain_name}-{path_name}-' \
+                        f'{os.path.basename(tg[attribute])}'
+
+            save_to_file(os.path.join(path, folder_name, file_name),
+                         requests.get(f'{url}{tg[attribute]}').content)
+
+            tg[attribute] = os.path.join(folder_name, file_name)
+
+        bar.finish()
 
     response = requests.get(url)
     soup = BeautifulSoup(response.text, 'html.parser')
