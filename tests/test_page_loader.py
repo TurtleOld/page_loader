@@ -53,9 +53,9 @@ def test_folder_creation():
 @pytest.mark.parametrize('expected', [
     changed_html_file_name,
     created_dir_name,
-    # created_image,
-    # created_css,
-    # created_js
+    created_image,
+    created_css,
+    created_js
 ])
 def test_download_content(expected):
     with requests_mock.Mocker(real_http=True) as mock:

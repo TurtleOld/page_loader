@@ -80,7 +80,7 @@ def download_content(url, path):
 
         for tag in tags:
             try:
-                #
+
                 if tag[attribute].startswith('/') and \
                         not tag[attribute].startswith('//') \
                         and tag[attr].endswith(('png', 'jpg', 'js', 'css')):
@@ -92,6 +92,7 @@ def download_content(url, path):
         bar = IncrementalBar('Download', max=len(result),
                              suffix='%(percent).1f%%')
         for tg in result:
+
             bar.next()
             path_name = \
                 get_new_link_format(os.path.dirname(tg[attribute]))
