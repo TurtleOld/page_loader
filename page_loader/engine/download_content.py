@@ -85,7 +85,6 @@ def get_content(url):
 
 
 def get_html_file(url, path):
-
     response = get_content(url)
 
     if response:
@@ -106,31 +105,20 @@ def download_content(url, path):
         domain_name = get_new_link_format(url)
         folder_name = create_folder(url, path)
         result = []
-
-        for tag in tags:
-            try:
-
-                if tag[attribute].startswith('/') and \
-                        not tag[attribute].startswith('//') \
-                        and tag[attr].endswith(('png', 'jpg', 'js', 'css')):
-                    result.append(tag)
-
-            except KeyError:
-                continue
-
         bar = IncrementalBar('Download', max=len(result),
                              suffix='%(percent).1f%%')
-        for tg in result:
+
+        for tag in tags:
             bar.next()
             path_name = \
-                get_new_link_format(os.path.dirname(tg[attribute]))
+                get_new_link_format(os.path.dirname(tag[attribute]))
             file_name = f'{domain_name}-{path_name}-' \
-                        f'{os.path.basename(tg[attribute])}'
+                        f'{os.path.basename(tag[attribute])}'
 
             save_to_file(os.path.join(path, folder_name, file_name),
-                         get_content(f'{url}{tg[attribute]}'))
+                         get_content(f'{url}{tag[attribute]}'))
 
-            tg[attribute] = os.path.join(folder_name, file_name)
+            tag[attribute] = os.path.join(folder_name, file_name)
 
         bar.finish()
 

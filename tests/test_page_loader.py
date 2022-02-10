@@ -6,7 +6,7 @@ import requests
 from requests_mock import Mocker
 
 from page_loader import download
-from page_loader.engine.download_content import create_folder, get_content
+from page_loader.engine.download_content import get_content
 
 URL = 'https://page-loader.hexlet.repl.co'
 INVALID_URL = 'https://badsite.com'
@@ -42,10 +42,10 @@ def read_file(file):
         return f.read()
 
 
-def test_folder_creation():
-    folder = create_folder(URL, DOWNLOADS_DIR)
-    assert os.path.join(DOWNLOADS_DIR, folder) == os.path.join(DOWNLOADS_DIR,
-                                                               CREATED_DIR_NAME)
+# def test_folder_creation():
+#     folder = create_folder(URL, DOWNLOADS_DIR)
+#     assert os.path.join(DOWNLOADS_DIR, folder) == os.path.join(DOWNLOADS_DIR,
+#                                                                CREATED_DIR_NAME)
 
 
 @pytest.mark.parametrize('expected', [
