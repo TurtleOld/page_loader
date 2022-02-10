@@ -2,12 +2,15 @@ import os
 import tempfile
 
 import pytest
-import requests_mock
+import requests
+from requests_mock import Mocker
 
 from page_loader import download
-from page_loader.engine.download_content import create_folder, get_html_file
+from page_loader.engine.download_content import create_folder, get_html_file, \
+    get_content
 
 URL = 'https://page-loader.hexlet.repl.co'
+INVALID_URL = 'https://badsite.com'
 INTERNET_PATH_IMAGE = 'assets/professions/nodejs.png'
 INTERNET_PATH_CSS = 'assets/application.css'
 INTERNET_PATH_JS = 'script.js'
@@ -54,7 +57,7 @@ def test_folder_creation():
     # CREATED_JS
 ])
 def test_download_content(expected):
-    with requests_mock.Mocker(real_http=True) as mock:
+    with Mocker(real_http=True) as mock:
         mock.get(URL, content=read_file(CREATED_HTML_FILE))
         mock.get(URL_IMAGE, content=read_file(EXPECTED_IMAGE))
         mock.get(URL_CSS, content=read_file(EXPECTED_CSS))
@@ -69,7 +72,7 @@ def test_download_content(expected):
     (CHANGED_HTML_FILE_NAME, HTML_FILE_NAME),
 ])
 def test_change_html_file(new_file, old_file):
-    with requests_mock.Mocker(real_http=True) as mock:
+    with Mocker(real_http=True) as mock:
         mock.get(URL, content=read_file(CREATED_HTML_FILE))
         with tempfile.TemporaryDirectory() as directory:
             download(URL, directory)
@@ -82,4 +85,21 @@ def test_get_html_file():
     assert result == HTML_FILE_NAME
 
 
+def test_connection_error(requests_mock: Mocker):
 
+    requests_mock.get(INVALID_URL, exc=requests.exceptions.ConnectionError)
+
+    with tempfile.TemporaryDirectory() as tmp_dir_name:
+        assert not os.listdir(tmp_dir_name)
+
+        with pytest.raises(Exception):
+            assert download(INVALID_URL, tmp_dir_name)
+
+        assert not os.listdir(tmp_dir_name)
+
+
+def test_get_content():
+    try:
+        get_content(URL)
+    except Exception as exc:
+        assert pytest.fail(exc, pytrace=True)
