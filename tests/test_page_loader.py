@@ -5,11 +5,9 @@ import pytest
 import requests_mock
 
 from page_loader import download
-from page_loader.engine.download_content import create_folder, get_html_file, \
-    get_content
+from page_loader.engine.download_content import create_folder, get_html_file
 
 URL = 'https://page-loader.hexlet.repl.co'
-INVALID_URL = 'https://badsite.com'
 INTERNET_PATH_IMAGE = 'assets/professions/nodejs.png'
 INTERNET_PATH_CSS = 'assets/application.css'
 INTERNET_PATH_JS = 'script.js'
@@ -84,8 +82,4 @@ def test_get_html_file():
     assert result == HTML_FILE_NAME
 
 
-def test_get_content():
-    try:
-        get_content(URL)
-    except Exception as exc:
-        pytest.fail(exc, pytrace=True)
+
