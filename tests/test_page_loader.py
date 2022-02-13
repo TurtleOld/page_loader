@@ -23,7 +23,8 @@ DOWNLOADS_DIR = os.path.join('fixtures', 'downloads', 'changed')
 HTML_FILE_NAME = os.path.join(PATH_ORIGINAL, 'page-loader-hexlet-repl-co.html')
 CHANGED_HTML_FILE_NAME = 'page-loader-hexlet-repl-co.html'
 CREATED_DIR_NAME = 'page-loader-hexlet-repl-co_files'
-IMAGE_NAME = 'page-loader-hexlet-repl-co--assets-professions-nodejs.png'
+IMAGE_NAME = 'page-loader-hexlet-repl-co-page-loader-hexlet-repl-co--assets' \
+             '-professions-nodejs.png '
 CSS_NAME = 'page-loader-hexlet-repl-co--assets-application.css'
 JS_NAME = 'page-loader-hexlet-repl-co---script.js'
 
@@ -51,8 +52,8 @@ def read_file(file):
 @pytest.mark.parametrize('expected', [
     CHANGED_HTML_FILE_NAME,
     CREATED_DIR_NAME,
-    # CREATED_IMAGE,
-    CREATED_CSS,
+    CREATED_IMAGE,
+    # CREATED_CSS,
     # CREATED_JS
 ])
 def test_download_content(expected):
