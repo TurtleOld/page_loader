@@ -97,25 +97,22 @@ def get_html_file(url, path):
 
 
 def download_content(url, path):
-    file_content = get_html_file(url, path)
+    path_to_file_content = get_html_file(url, path)
 
     def get_link_to_file(search_tag, attribute):
 
         tags = soup.find_all(search_tag)
         domain_name = get_new_link_format(url)
         folder_name = create_folder(url, path)
-        result = []
-        bar = IncrementalBar('Download', max=len(result),
+        bar = IncrementalBar('Download', max=len(tags),
                              suffix='%(percent).1f%%')
 
         for tag in tags:
             bar.next()
-            path_name = \
-                get_new_link_format(os.path.dirname(tag[attribute]))
-            file_name = f'{domain_name}-{path_name}-' \
-                        f'{os.path.basename(tag[attribute])}'
 
-            save_to_file(os.path.join(path, folder_name, file_name),
+            file_name = f'{domain_name}-{os.path.basename(tag[attribute])}'
+
+            save_to_file(file_name,
                          get_content(f'{url}{tag[attribute]}'))
 
             tag[attribute] = os.path.join(folder_name, file_name)
@@ -128,4 +125,4 @@ def download_content(url, path):
     for tag_name, attr in TAGS_ATTRIBUTES.items():
         get_link_to_file(tag_name, attr)
 
-    save_to_file(file_content, soup.prettify(formatter='minimal'))
+    save_to_file(path_to_file_content, soup.prettify(formatter='minimal'))

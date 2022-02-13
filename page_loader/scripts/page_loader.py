@@ -3,7 +3,7 @@
 import logging.config
 import sys
 
-from page_loader.engine.download import download
+from page_loader import download
 from page_loader.engine.parse_cli_args import parse_cli_arguments
 
 log = logging.getLogger(__name__)
