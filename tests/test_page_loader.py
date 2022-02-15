@@ -25,7 +25,7 @@ CHANGED_HTML_FILE_NAME = 'page-loader-hexlet-repl-co.html'
 CREATED_DIR_NAME = 'page-loader-hexlet-repl-co_files'
 IMAGE_NAME = 'page-loader-hexlet-repl-co-page-loader-hexlet-repl-co--assets' \
              '-professions-nodejs.png '
-CSS_NAME = 'page-loader-hexlet-repl-co--assets-application.css'
+CSS_NAME = 'page-loader-hexlet-repl-co-page-loader-hexlet-repl-co--assets-application.css'
 JS_NAME = 'page-loader-hexlet-repl-co---script.js'
 
 CREATED_HTML_FILE = os.path.join(DOWNLOADS_DIR, CHANGED_HTML_FILE_NAME)
@@ -53,7 +53,7 @@ def read_file(file):
     CHANGED_HTML_FILE_NAME,
     CREATED_DIR_NAME,
     CREATED_IMAGE,
-    # CREATED_CSS,
+    CREATED_CSS,
     # CREATED_JS
 ])
 def test_download_content(expected):

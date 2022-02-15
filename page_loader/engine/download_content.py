@@ -81,7 +81,7 @@ def get_content(url):
                   f'Check the correctness of the entered link! ')
         raise
     else:
-        return response.text
+        return response.content
 
 
 def get_html_file(url, path):
@@ -94,6 +94,11 @@ def get_html_file(url, path):
         save_to_file(path_to_file, response)
 
         return path_to_file
+
+
+def get_soup(url):
+    response = get_content(url)
+    return BeautifulSoup(response, 'html.parser')
 
 
 def download_content(url, path):
@@ -109,13 +114,11 @@ def download_content(url, path):
                              suffix='%(percent).1f%%')
 
         for tag in tags:
-
             bar.next()
 
             file_name = f'{os.path.basename(tag[attribute])}'
-
-            save_to_file(os.path.join(path, folder_name,
-                                      f'{domain_name}-{file_name}'),
+            print(tag[attribute])
+            save_to_file(f'{domain_name}-{file_name}',
                          get_content(f'{url}{tag[attribute]}'))
 
             tag[attribute] = os.path.join(folder_name,
@@ -123,8 +126,7 @@ def download_content(url, path):
 
         bar.finish()
 
-    response = get_content(url)
-    soup = BeautifulSoup(response, 'html.parser')
+    soup = get_soup(url)
 
     for tag_name, attr in TAGS_ATTRIBUTES.items():
         get_link_to_file(tag_name, attr)
