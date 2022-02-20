@@ -117,12 +117,18 @@ def download_content(url, path):
             bar.next()
 
             file_name = f'{os.path.basename(tag[attribute])}'
-            print(tag[attribute])
-            save_to_file(f'{domain_name}-{file_name}',
+            paths = os.path.dirname(tag[attribute])
+            print(os.path.join(path, folder_name,
+                               f'{domain_name}-{get_new_link_format(paths)}-'
+                               f'{file_name}'))
+            save_to_file(os.path.join(path, folder_name, f'{domain_name}-'
+                                                         f'{file_name}'),
                          get_content(f'{url}{tag[attribute]}'))
 
             tag[attribute] = os.path.join(folder_name,
-                                          f'{domain_name}-{file_name}')
+                                          f'{domain_name}-'
+                                          f'{get_new_link_format(paths)}-'
+                                          f'{file_name}')
 
         bar.finish()
 
