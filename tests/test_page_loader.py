@@ -90,7 +90,7 @@ def test_connection_error(requests_mock: Mocker):
         with pytest.raises(Exception):
             assert download(INVALID_URL, tmp_dir_name)
 
-            assert not os.listdir(tmp_dir_name)
+        assert not os.listdir(tmp_dir_name)
 
 
 def test_get_content():
