@@ -25,18 +25,19 @@ def get_new_link_format(url):
 
 
 def create_folder(url, path):
-    string = get_new_link_format(url)
-    folder_name = f'{string}_files'
-    full_path = os.path.join(path, folder_name)
+    if requests.get(url).status_code == 200:
+        string = get_new_link_format(url)
+        folder_name = f'{string}_files'
+        full_path = os.path.join(path, folder_name)
 
-    if not os.path.isdir(full_path) and requests.get(url) == 200:
-        try:
-            os.mkdir(full_path)
-        except IOError:
-            log.error(f'Failed to create folder {folder_name}')
-            raise
+        if not os.path.isdir(full_path):
+            try:
+                os.mkdir(full_path)
+            except IOError:
+                log.error(f'Failed to create folder {folder_name}')
+                raise
 
-    return folder_name
+        return folder_name
 
 
 def save_to_file(path_to_file, data):
