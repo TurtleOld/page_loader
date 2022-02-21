@@ -58,14 +58,14 @@ def test_folder_creation():
 ])
 def test_download_content(expected):
     with Mocker(real_http=True) as mock:
-        mock.get(URL, content=read_file(CREATED_HTML_FILE))
+        mock.get(URL, content=read_file(HTML_FILE_NAME))
         mock.get(URL_IMAGE, content=read_file(EXPECTED_IMAGE))
         mock.get(URL_CSS, content=read_file(EXPECTED_CSS))
         mock.get(URL_JS, content=read_file(EXPECTED_JS))
-    with tempfile.TemporaryDirectory() as directory:
-        download(URL, directory)
-        expected_path = os.path.join(directory, expected)
-        assert os.path.exists(expected_path)
+        with tempfile.TemporaryDirectory() as directory:
+            download(URL, directory)
+            expected_path = os.path.join(directory, expected)
+            assert os.path.exists(expected_path)
 
 
 @pytest.mark.parametrize('new_file, old_file', [
