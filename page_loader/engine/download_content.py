@@ -29,7 +29,7 @@ def create_folder(url, path):
     folder_name = f'{string}_files'
     full_path = os.path.join(path, folder_name)
 
-    if not os.path.isdir(full_path):
+    if not os.path.isdir(full_path) and requests.get(url) == 200:
         try:
             os.mkdir(full_path)
         except IOError:
@@ -61,10 +61,16 @@ def get_content(url):
     except requests.exceptions.HTTPError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
+    except requests.exceptions.SSLError:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Check the correctness of the entered link!')
     except requests.exceptions.ConnectionError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
     except requests.RequestException:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Check the correctness of the entered link!')
+    except urllib3.util.ssl_url:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
     except urllib3.exceptions.MaxRetryError:
