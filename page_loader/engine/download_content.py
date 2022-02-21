@@ -70,7 +70,7 @@ def get_content(url):
     except requests.RequestException:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
-    except urllib3.util.ssl_url:
+    except urllib3.util.ssl_:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
     except urllib3.exceptions.MaxRetryError:
