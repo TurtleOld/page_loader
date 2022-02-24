@@ -1,3 +1,4 @@
+import itertools
 import logging
 import os
 import re
@@ -108,7 +109,7 @@ def get_soup(url):
     return BeautifulSoup(response, 'html.parser')
 
 
-def download_content(url, path):
+def change_links(url, path):
     path_to_file = get_html_file(url, path)
     domain_name = get_new_link_format(url)
     folder_name = create_folder(url, path)
@@ -127,9 +128,6 @@ def download_content(url, path):
 
             paths = os.path.dirname(tag[attribute])
 
-            save_to_file(os.path.join(path, folder_name, file_name),
-                         get_content(f'{url}{tag[attribute]}'))
-
             tag[attribute] = os.path.join(folder_name,
                                           f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
@@ -143,3 +141,37 @@ def download_content(url, path):
         get_link_to_file(tag_name, attr)
 
     save_to_file(path_to_file, soup.prettify(formatter='minimal'))
+
+
+def download_content(url, path):
+    folder_name = create_folder(url, path)
+    domain_name = get_new_link_format(url)
+    soup = get_soup(url)
+
+    tags_src = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': True})
+    tags_href = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': False})
+
+    # bar_src = IncrementalBar('Download', max=len(tags_src),
+    #                          suffix='%(percent).1f%%')
+    # bar_href = IncrementalBar('Download', len(tags_href), suffix='%(percent).1f%%')
+
+    for tag in tags_src:
+
+        if tag['src']:
+            file_name = f'{os.path.basename(tag["src"])}'
+            paths = os.path.dirname(tag['src'])
+            print(os.path.join(path, folder_name, f'{domain_name}-'
+                                                         f'{get_new_link_format(paths)}-'
+                                                         f'{file_name}'))
+            save_to_file(os.path.join(path, folder_name, f'{domain_name}-'
+                                                         f'{get_new_link_format(paths)}-'
+                                                         f'{file_name}'),
+                         get_content(f'{url}{tag["src"]}'))
+
+    for tag_ in tags_href:
+
+        if tag_['href']:
+            file_name = f'{os.path.basename(tag_["href"])}'
+
+            save_to_file(os.path.join(path, folder_name, file_name),
+                         get_content(f'{url}{tag_["href"]}'))
