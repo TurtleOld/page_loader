@@ -63,8 +63,10 @@ def test_download_content(expected):
         mock.get(URL_CSS, content=read_file(EXPECTED_CSS))
         mock.get(URL_JS, content=read_file(EXPECTED_JS))
         with tempfile.TemporaryDirectory() as directory:
+            assert not os.listdir(directory)
             download(URL, directory)
             expected_path = os.path.join(directory, expected)
+            assert len(os.listdir(os.path.join(directory, CREATED_DIR_NAME))) == 3
             assert os.path.exists(expected_path)
 
 
