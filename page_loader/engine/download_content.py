@@ -124,15 +124,24 @@ def change_links(url, path):
 
         for tag in tags:
             bar.next()
+            if os.path.dirname(tag[attribute]) != '/':
+                file_name = f'{os.path.basename(tag[attribute])}'
 
-            file_name = f'{os.path.basename(tag[attribute])}'
+                paths = os.path.dirname(tag[attribute])
 
-            paths = os.path.dirname(tag[attribute])
+                tag[attribute] = os.path.join(folder_name,
+                                              f'{domain_name}'
+                                              f'{get_new_link_format(paths)}-'
+                                              f'{file_name}')
+            else:
+                file_name = f'{os.path.basename(tag[attribute])}'
 
-            tag[attribute] = os.path.join(folder_name,
-                                          f'{domain_name}-'
-                                          f'{get_new_link_format(paths)}-'
-                                          f'{file_name}')
+                paths = os.path.dirname(tag[attribute])
+
+                tag[attribute] = os.path.join(folder_name,
+                                              f'{domain_name}-'
+                                              f'{get_new_link_format(paths)}-'
+                                              f'{file_name}')
 
         bar.finish()
 
