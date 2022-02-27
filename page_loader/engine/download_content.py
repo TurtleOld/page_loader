@@ -146,7 +146,8 @@ def change_links(url, path):
 
 def download_content(url, path):
     folder_name = create_folder(url, path)
-    domain_name = get_new_link_format(url)
+    preparation = urlparse(url)
+    domain_name = get_new_link_format(preparation.netloc)
     soup = get_soup(url)
 
     tags_src = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': True})
