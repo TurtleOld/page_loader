@@ -111,7 +111,8 @@ def get_soup(url):
 
 def change_links(url, path):
     path_to_file = get_html_file(url, path)
-    domain_name = get_new_link_format(url)
+    preparation = urlparse(url)
+    domain_name = get_new_link_format(preparation.netloc)
     folder_name = create_folder(url, path)
 
     def get_link_to_file(search_tag, attribute):
