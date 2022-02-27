@@ -157,7 +157,7 @@ def download_content(url, path):
 
     for tag in tags_src:
 
-        if tag['src']:
+        if tag['src'] and not tag['src'].startswith('http'):
             file_name = f'{os.path.basename(tag["src"])}'
             paths = os.path.dirname(tag['src'])
             print(os.path.join(path, folder_name, f'{domain_name}-'
@@ -170,7 +170,7 @@ def download_content(url, path):
 
     for tag_ in tags_href:
         print(tag_)
-        if tag_['href']:
+        if tag_['href'] and not tag_['href'].startswith('http'):
             file_name = f'{os.path.basename(tag_["href"])}'
             paths = os.path.dirname(tag_['href'])
             save_to_file(os.path.join(path, folder_name, f'{domain_name}-'
