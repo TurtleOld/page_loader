@@ -46,9 +46,11 @@ def save_to_file(path_to_file, data):
         if isinstance(data, bytes):
             with open(path_to_file, 'wb') as file_name:
                 file_name.write(data)
+
         else:
             with open(path_to_file, 'w', encoding='utf-8') as file_name:
                 file_name.write(data)
+
     except PermissionError:
         log.error(f'Permission denied to the specified directory '
                   f'{path_to_file}')
@@ -119,11 +121,7 @@ def change_links(url, path):
 
         tags = soup.find_all(search_tag)
 
-        bar = IncrementalBar('Download', max=len(tags),
-                             suffix='%(percent).1f%%')
-
         for tag in tags:
-            bar.next()
             if os.path.dirname(tag[attribute]) != '/':
                 file_name = f'{os.path.basename(tag[attribute])}'
 
@@ -143,8 +141,6 @@ def change_links(url, path):
                                               f'{get_new_link_format(paths)}-'
                                               f'{file_name}')
 
-        bar.finish()
-
     soup = get_soup(url)
 
     for tag_name, attr in TAGS_ATTRIBUTES.items():
@@ -162,31 +158,19 @@ def download_content(url, path):
     tags_src = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': True})
     tags_href = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': False})
 
-    # bar_src = IncrementalBar('Download', max=len(tags_src),
-    #                          suffix='%(percent).1f%%')
-    # bar_href = IncrementalBar('Download', len(tags_href), suffix='%(percent).1f%%')
-
     for tag in tags_src:
         if tag['src'] and not tag['src'].startswith('http'):
             if os.path.dirname(tag['src']) != '/':
                 file_name = f'{os.path.basename(tag["src"])}'
                 paths = os.path.dirname(tag['src'])
-                print(os.path.join(path, folder_name, f'{domain_name}'
-                                                      f'{get_new_link_format(paths)}-'
-                                                      f'{file_name}'))
-                save_to_file(os.path.join(path, folder_name, f'{domain_name}'
-                                                             f'{get_new_link_format(paths)}-'
-                                                             f'{file_name}'),
+                print(os.path.join(path, folder_name, file_name))
+                save_to_file(os.path.join(path, folder_name, file_name),
                              get_content(f'{url}{tag["src"]}'))
             else:
                 file_name = f'{os.path.basename(tag["src"])}'
                 paths = os.path.dirname(tag['src'])
-                print(os.path.join(path, folder_name, f'{domain_name}-'
-                                                      f'{get_new_link_format(paths)}-'
-                                                      f'{file_name}'))
-                save_to_file(os.path.join(path, folder_name, f'{domain_name}-'
-                                                             f'{get_new_link_format(paths)}-'
-                                                             f'{file_name}'),
+
+                save_to_file(os.path.join(path, folder_name, file_name),
                              get_content(f'{url}{tag["src"]}'))
 
     for tag_ in tags_href:
@@ -195,20 +179,12 @@ def download_content(url, path):
             if os.path.dirname(tag_['href']) != '/':
                 file_name = f'{os.path.basename(tag_["href"])}'
                 paths = os.path.dirname(tag_['href'])
-                print(os.path.join(path, folder_name, f'{domain_name}'
-                                                      f'{get_new_link_format(paths)}-'
-                                                      f'{file_name}'))
-                save_to_file(os.path.join(path, folder_name, f'{domain_name}'
-                                                             f'{get_new_link_format(paths)}-'
-                                                             f'{file_name}'),
+
+                save_to_file(os.path.join(path, folder_name, file_name),
                              get_content(f'{url}{tag_["href"]}'))
             else:
                 file_name = f'{os.path.basename(tag_["href"])}'
                 paths = os.path.dirname(tag_['href'])
-                print(os.path.join(path, folder_name, f'{domain_name}-'
-                                                      f'{get_new_link_format(paths)}-'
-                                                      f'{file_name}'))
-                save_to_file(os.path.join(path, folder_name, f'{domain_name}-'
-                                                             f'{get_new_link_format(paths)}-'
-                                                             f'{file_name}'),
+
+                save_to_file(os.path.join(path, folder_name, file_name),
                              get_content(f'{url}{tag_["href"]}'))
