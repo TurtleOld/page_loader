@@ -163,7 +163,7 @@ def download_content(url, path):
             if os.path.dirname(tag['src']) != '/':
                 file_name = f'{os.path.basename(tag["src"])}'
                 paths = os.path.dirname(tag['src'])
-
+                print(f'{urls}{tag["src"]}')
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
@@ -172,7 +172,7 @@ def download_content(url, path):
             else:
                 file_name = f'{os.path.basename(tag["src"])}'
                 paths = os.path.dirname(tag['src'])
-
+                print(f'{urls}{tag["src"]}')
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
@@ -186,7 +186,7 @@ def download_content(url, path):
             if os.path.dirname(tag_['href']) != '/':
                 file_name = f'{os.path.basename(tag_["href"])}'
                 paths = os.path.dirname(tag_['href'])
-
+                print(f'{urls}{tag_["href"]}')
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
@@ -195,7 +195,7 @@ def download_content(url, path):
             else:
                 file_name = f'{os.path.basename(tag_["href"])}'
                 paths = os.path.dirname(tag_['href'])
-
+                print(f'{urls}{tag_["href"]}')
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
