@@ -186,7 +186,7 @@ def download_content(url, path):
                                       f'{domain_name}'
                                       f'{get_new_link_format(paths)}-'
                                       f'{file_name}'),
-                         get_content(f'{urls}{tag["src"]}'))
+                         get_content(tag["src"]))
 
     for tag_ in tags_href:
 
