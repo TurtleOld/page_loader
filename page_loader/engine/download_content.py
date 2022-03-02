@@ -177,7 +177,7 @@ def download_content(url, path):
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(f'{urls}{tag["src"]}'))
-        if tag['src'].startswith('http'):
+        if tag['src'].startswith('http') and '.' in tag['src']:
             file_name = f'{os.path.basename(tag["src"])}'
             print('file_name', file_name)
             paths = os.path.dirname(tag['src'])
