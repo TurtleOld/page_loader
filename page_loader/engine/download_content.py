@@ -158,11 +158,11 @@ def download_content(url, path):
     tags_href = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': False})
 
     for tag in tags_src:
-        file_name = f'{os.path.basename(tag["src"])}'
+
         if tag['src'] and not tag['src'].startswith('http') \
                 and '.' in tag['src']:
             if os.path.dirname(tag['src']) != '/':
-
+                file_name = f'{os.path.basename(tag["src"])}'
                 paths = os.path.dirname(tag['src'])
                 print(f'{urls}{tag["src"]}')
                 save_to_file(os.path.join(path, folder_name,
@@ -180,6 +180,7 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(f'{urls}{tag["src"]}'))
         if tag['src'].startswith('http'):
+            file_name = f'{os.path.basename(tag["src"])}'
             paths = os.path.dirname(tag['src'])
             print(f'{urls}{tag["src"]}')
             save_to_file(os.path.join(path, folder_name,
