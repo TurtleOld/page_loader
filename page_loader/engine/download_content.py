@@ -180,6 +180,8 @@ def download_content(url, path):
         if tag['src'].startswith('http') and '.' in tag['src']:
             file_name = f'{os.path.basename(tag["src"])}'
             print('file_name', file_name)
+            _, file_extension = os.path.splitext(file_name)
+            print('file_extension', file_extension)
             paths = os.path.dirname(tag['src'])
             print('paths', paths)
             print(tag["src"])
