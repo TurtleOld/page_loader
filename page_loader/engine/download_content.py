@@ -1,4 +1,3 @@
-import itertools
 import logging
 import os
 import re
@@ -8,7 +7,6 @@ from urllib.parse import urlparse
 import requests
 import urllib3.exceptions
 from bs4 import BeautifulSoup
-from progress.bar import IncrementalBar
 
 TAGS_ATTRIBUTES = {
     'img': 'src',
@@ -161,12 +159,12 @@ def download_content(url, path):
 
     for tag in tags_src:
         if tag['src'] and not tag['src'].startswith('http') \
-                      and '.' in tag['src']:
+                and '.' in tag['src']:
             if os.path.dirname(tag['src']) != '/':
                 file_name = f'{os.path.basename(tag["src"])}'
                 paths = os.path.dirname(tag['src'])
 
-                save_to_file(os.path.join(path, folder_name, 
+                save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
@@ -175,7 +173,7 @@ def download_content(url, path):
                 file_name = f'{os.path.basename(tag["src"])}'
                 paths = os.path.dirname(tag['src'])
 
-                save_to_file(os.path.join(path, folder_name, 
+                save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
@@ -184,12 +182,12 @@ def download_content(url, path):
     for tag_ in tags_href:
 
         if tag_['href'] and not tag_['href'].startswith('http') \
-                        and '.' in tag_['href']:
+                and '.' in tag_['href']:
             if os.path.dirname(tag_['href']) != '/':
                 file_name = f'{os.path.basename(tag_["href"])}'
                 paths = os.path.dirname(tag_['href'])
 
-                save_to_file(os.path.join(path, folder_name, 
+                save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
@@ -198,7 +196,7 @@ def download_content(url, path):
                 file_name = f'{os.path.basename(tag_["href"])}'
                 paths = os.path.dirname(tag_['href'])
 
-                save_to_file(os.path.join(path, folder_name, 
+                save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
