@@ -177,7 +177,7 @@ def download_content(url, path):
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(f'{urls}{tag["src"]}'))
-        if tag['src'].startswith('http') and '.' in tag['src']:
+        if tag['src'].startswith('http'):
             file_name = f'{os.path.basename(tag["src"])}'
             if os.path.isfile(file_name):
                 print('file_name', file_name)
@@ -215,3 +215,20 @@ def download_content(url, path):
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(f'{urls}{tag_["href"]}'))
+        if tag_['src'].startswith('http'):
+            file_name = f'{os.path.basename(tag_["src"])}'
+            if os.path.isfile(file_name):
+                print('file_name', file_name)
+                print('file_extension', os.path.isfile(file_name))
+                paths = os.path.dirname(tag_['src'])
+                print('paths', paths)
+                print(tag_["src"])
+                print('save', os.path.join(path, folder_name,
+                                           f'{domain_name}-'
+                                           f'{get_new_link_format(paths)}-'
+                                           f'{file_name}'))
+                save_to_file(os.path.join(path, folder_name,
+                                          f'{domain_name}-'
+                                          f'{get_new_link_format(paths)}-'
+                                          f'{file_name}'),
+                             get_content(tag_["src"]))
