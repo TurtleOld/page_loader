@@ -153,6 +153,7 @@ def download_content(url, path):
     folder_name = create_folder(url, path)
     preparation = urlparse(url)
     domain_name = get_new_link_format(preparation.netloc)
+    urls = f'{preparation.scheme}://{preparation.netloc}'
     soup = get_soup(url)
 
     tags_src = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': True})
@@ -167,7 +168,7 @@ def download_content(url, path):
                 save_to_file(os.path.join(path, folder_name, f'{domain_name}'
                                                              f'{get_new_link_format(paths)}-'
                                                              f'{file_name}'),
-                             get_content(f'{domain_name}{tag["src"]}'))
+                             get_content(f'{urls}{tag["src"]}'))
             else:
                 file_name = f'{os.path.basename(tag["src"])}'
                 paths = os.path.dirname(tag['src'])
@@ -175,7 +176,7 @@ def download_content(url, path):
                 save_to_file(os.path.join(path, folder_name, f'{domain_name}-'
                                                              f'{get_new_link_format(paths)}-'
                                                              f'{file_name}'),
-                             get_content(f'{domain_name}{tag["src"]}'))
+                             get_content(f'{urls}{tag["src"]}'))
 
     for tag_ in tags_href:
 
@@ -187,7 +188,7 @@ def download_content(url, path):
                 save_to_file(os.path.join(path, folder_name, f'{domain_name}'
                                                              f'{get_new_link_format(paths)}-'
                                                              f'{file_name}'),
-                             get_content(f'{domain_name}{tag_["href"]}'))
+                             get_content(f'{urls}{tag_["href"]}'))
             else:
                 file_name = f'{os.path.basename(tag_["href"])}'
                 paths = os.path.dirname(tag_['href'])
@@ -195,4 +196,4 @@ def download_content(url, path):
                 save_to_file(os.path.join(path, folder_name, f'{domain_name}-'
                                                              f'{get_new_link_format(paths)}-'
                                                              f'{file_name}'),
-                             get_content(f'{domain_name}{tag_["href"]}'))
+                             get_content(f'{urls}{tag_["href"]}'))
