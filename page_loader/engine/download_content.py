@@ -161,6 +161,7 @@ def download_content(url, path):
     for tag in tags_src:
         file_name = f'{os.path.basename(tag["src"])}'
         paths = os.path.dirname(tag['src'])
+        print(paths)
         extension = Path(f'{urls}{tag["src"]}').suffix
         result = re.search(r'.\D{2,4}$', extension)
         if not tag['src'].startswith('http'):
