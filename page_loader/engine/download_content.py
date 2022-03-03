@@ -161,7 +161,6 @@ def download_content(url, path):
     for tag in tags_src:
         file_name = f'{os.path.basename(tag["src"])}'
         paths = os.path.dirname(tag['src'])
-        print(paths)
         extension = Path(f'{urls}{tag["src"]}').suffix
         result = re.search(r'.\D{2,4}$', extension)
         if not tag['src'].startswith('http'):
@@ -178,9 +177,9 @@ def download_content(url, path):
                              get_content(f'{urls}{tag["src"]}'))
             else:
                 print("html!:", os.path.join(path, folder_name,
-                                             f'{domain_name}-'
-                                             f'{get_new_link_format(paths)}-'
-                                             f'{tag["src"]}.html'
+                                             f'{domain_name}'
+                                             f'{get_new_link_format(paths)}'
+                                             f'{get_new_link_format(tag["src"])}.html'
                                              ))
 
         if tag['src'].startswith('http') \
@@ -197,9 +196,9 @@ def download_content(url, path):
                              get_content(tag["src"]))
             else:
                 print("html!:", os.path.join(path, folder_name,
-                                             f'{domain_name}-'
-                                             f'{get_new_link_format(paths)}-'
-                                             f'{tag["src"]}.html'
+                                             f'{domain_name}'
+                                             f'{get_new_link_format(paths)}'
+                                             f'{get_new_link_format(tag["src"])}.html'
                                              ))
 
     for tag_ in tags_href:
@@ -221,9 +220,9 @@ def download_content(url, path):
                              get_content(f'{urls}{tag_["href"]}'))
             else:
                 print("html!:", os.path.join(path, folder_name,
-                                             f'{domain_name}-'
-                                             f'{get_new_link_format(paths)}-'
-                                             f'{tag_["src"]}.html'
+                                             f'{domain_name}'
+                                             f'{get_new_link_format(paths)}'
+                                             f'{get_new_link_format(tag_["href"])}.html'
                                              ))
 
         if tag_['href'].startswith('http') \
@@ -240,7 +239,7 @@ def download_content(url, path):
                              get_content(tag_["href"]))
             else:
                 print("html!:", os.path.join(path, folder_name,
-                                             f'{domain_name}-'
-                                             f'{get_new_link_format(paths)}-'
-                                             f'{tag_["src"]}.html'
+                                             f'{domain_name}'
+                                             f'{get_new_link_format(paths)}'
+                                             f'{get_new_link_format(tag_["href"])}.html'
                                              ))
