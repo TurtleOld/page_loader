@@ -170,19 +170,18 @@ def download_content(url, path):
                                              f'{domain_name}'
                                              f'{get_new_link_format(paths)}-'
                                              f'{file_name}'),
-                      f'{urls}{tag["src"]}')
+                      tag["src"])
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(f'{urls}{tag["src"]}'))
-        else:
+        elif tag['src'].startswith('http') and preparation.netloc == tag['src']:
             if result:
                 print('src else', os.path.join(path, folder_name,
-                                               f'{domain_name}'
                                                f'{get_new_link_format(paths)}-'
                                                f'{file_name}'),
-                      f'{urls}{tag["src"]}')
+                      tag["src"])
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
@@ -207,10 +206,9 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(f'{urls}{tag_["href"]}'))
 
-        else:
+        elif tag['href'].startswith('http') and preparation.netloc == tag['href']:
             if result:
                 print('href else', os.path.join(path, folder_name,
-                                                f'{domain_name}'
                                                 f'{get_new_link_format(paths)}-'
                                                 f'{file_name}'),
                       tag_["href"])
