@@ -66,7 +66,7 @@ def test_download_content(expected):
             assert not os.listdir(directory)
             download(URL, directory)
             expected_path = os.path.join(directory, expected)
-            assert len(os.listdir(os.path.join(directory, CREATED_DIR_NAME))) == 3
+            assert len(os.listdir(os.path.join(directory, CREATED_DIR_NAME))) == 4
             assert os.path.exists(expected_path)
 
 

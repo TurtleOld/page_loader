@@ -176,11 +176,12 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(f'{urls}{tag["src"]}'))
             else:
-                print("html!:", os.path.join(path, folder_name,
-                                             f'{domain_name}'
-                                             f'{get_new_link_format(paths)}'
-                                             f'{get_new_link_format(tag["src"])}.html'
-                                             ))
+                save_to_file(os.path.join(path, folder_name,
+                                          f'{domain_name}'
+                                          f'{get_new_link_format(paths)}'
+                                          f'{get_new_link_format(tag["src"])}.html'
+                                          ),
+                             get_content(f'{urls}{tag["src"]}'))
 
         if tag['src'].startswith('http') \
                 and urlparse(url).netloc == urlparse(tag['src']).netloc:
@@ -195,11 +196,12 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(tag["src"]))
             else:
-                print("html!:", os.path.join(path, folder_name,
-                                             f'{domain_name}'
-                                             f'{get_new_link_format(paths)}'
-                                             f'{get_new_link_format(tag["src"])}.html'
-                                             ))
+                save_to_file(os.path.join(path, folder_name,
+                                          f'{domain_name}'
+                                          f'{get_new_link_format(paths)}'
+                                          f'{get_new_link_format(tag["src"])}.html'
+                                          ),
+                             get_content(tag["src"]))
 
     for tag_ in tags_href:
         file_name = f'{os.path.basename(tag_["href"])}'
@@ -219,11 +221,11 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(f'{urls}{tag_["href"]}'))
             else:
-                print("html!:", os.path.join(path, folder_name,
+                save_to_file(os.path.join(path, folder_name,
                                              f'{domain_name}'
-                                             f'{get_new_link_format(paths)}'
                                              f'{get_new_link_format(tag_["href"])}.html'
-                                             ))
+                                             ),
+                             get_content(f'{urls}{tag_["href"]}'))
 
         if tag_['href'].startswith('http') \
                 and urlparse(url).netloc == urlparse(tag_['href']).netloc:
@@ -238,6 +240,12 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(tag_["href"]))
             else:
+                save_to_file(os.path.join(path, folder_name,
+                                             f'{domain_name}'
+                                             f'{get_new_link_format(paths)}'
+                                             f'{get_new_link_format(tag_["href"])}.html'
+                                             ),
+                             get_content(tag_['href']))
                 print("html!:", os.path.join(path, folder_name,
                                              f'{domain_name}'
                                              f'{get_new_link_format(paths)}'
