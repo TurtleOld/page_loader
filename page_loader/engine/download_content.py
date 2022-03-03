@@ -206,7 +206,8 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(f'{urls}{tag_["href"]}'))
 
-        if tag['href'].startswith('http') and urlparse(url).netloc == urlparse(tag['href']).netloc:
+        if tag_['href'].startswith('http') \
+                and urlparse(url).netloc == urlparse(tag_['href']).netloc:
             if result:
                 print('href else', os.path.join(path, folder_name,
                                                 f'{get_new_link_format(paths)}-'
