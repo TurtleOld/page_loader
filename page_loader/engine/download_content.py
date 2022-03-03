@@ -179,30 +179,20 @@ def download_content(url, path):
                              get_content(tag["src"]))
 
     for tag_ in tags_href:
-
-        if tag_['href'] and not tag_['href'].startswith('http') \
-                and '.' in tag_['href']:
-            if os.path.dirname(tag_['href']) != '/':
-                file_name = f'{os.path.basename(tag_["href"])}'
-                paths = os.path.dirname(tag_['href'])
+        file_name = f'{os.path.basename(tag_["href"])}'
+        paths = os.path.dirname(tag_['href'])
+        extension = Path(f'{urls}{tag_["href"]}').suffix
+        result = re.search(r'.\D{2,4}$', extension)
+        if not tag_['href'].startswith('http'):
+            if result:
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(f'{urls}{tag_["href"]}'))
 
-        if tag_['href'].startswith('http'):
-            file_name = f'{os.path.basename(tag_["href"])}'
-            if os.path.isfile(file_name):
-                print('file_name', file_name)
-                print('file_extension', os.path.isfile(file_name))
-                paths = os.path.dirname(tag_['href'])
-                print('paths', paths)
-                print(tag_["href"])
-                print('save', os.path.join(path, folder_name,
-                                           f'{domain_name}-'
-                                           f'{get_new_link_format(paths)}-'
-                                           f'{file_name}'))
+        else:
+            if result:
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
