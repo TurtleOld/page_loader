@@ -176,6 +176,13 @@ def download_content(url, path):
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(f'{urls}{tag["src"]}'))
+            else:
+                print("html!:", os.path.join(path, folder_name,
+                                             f'{domain_name}-'
+                                             f'{get_new_link_format(paths)}-'
+                                             f'{tag["src"]}.html'
+                                             ))
+
         if tag['src'].startswith('http') \
                 and urlparse(url).netloc == urlparse(tag['src']).netloc:
             if result:
@@ -212,6 +219,12 @@ def download_content(url, path):
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(f'{urls}{tag_["href"]}'))
+            else:
+                print("html!:", os.path.join(path, folder_name,
+                                             f'{domain_name}-'
+                                             f'{get_new_link_format(paths)}-'
+                                             f'{tag_["src"]}.html'
+                                             ))
 
         if tag_['href'].startswith('http') \
                 and urlparse(url).netloc == urlparse(tag_['href']).netloc:
@@ -229,5 +242,5 @@ def download_content(url, path):
                 print("html!:", os.path.join(path, folder_name,
                                              f'{domain_name}-'
                                              f'{get_new_link_format(paths)}-'
-                                             f'{tag["src"]}.html'
+                                             f'{tag_["src"]}.html'
                                              ))
