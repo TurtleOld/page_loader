@@ -191,7 +191,6 @@ def download_content(url, path):
                                                f'{file_name}'),
                       tag["src"])
                 save_to_file(os.path.join(path, folder_name,
-                                          f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(tag["src"]))
@@ -235,7 +234,6 @@ def download_content(url, path):
                                                 f'{file_name}'),
                       tag_["href"])
                 save_to_file(os.path.join(path, folder_name,
-                                          f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(tag_["href"]))
