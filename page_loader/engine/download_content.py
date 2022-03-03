@@ -165,6 +165,11 @@ def download_content(url, path):
         result = re.search(r'.\D{2,4}$', extension)
         if not tag['src'].startswith('http'):
             if result:
+                print('src if', os.path.join(path, folder_name,
+                                             f'{domain_name}'
+                                             f'{get_new_link_format(paths)}-'
+                                             f'{file_name}'),
+                      f'{urls}{tag["src"]}')
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
@@ -172,6 +177,11 @@ def download_content(url, path):
                              get_content(f'{urls}{tag["src"]}'))
         else:
             if result:
+                print('src else', os.path.join(path, folder_name,
+                                               f'{domain_name}'
+                                               f'{get_new_link_format(paths)}-'
+                                               f'{file_name}'),
+                      f'{urls}{tag["src"]}')
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
@@ -185,6 +195,11 @@ def download_content(url, path):
         result = re.search(r'.\D{2,4}$', extension)
         if not tag_['href'].startswith('http'):
             if result:
+                print('href if', os.path.join(path, folder_name,
+                                              f'{domain_name}'
+                                              f'{get_new_link_format(paths)}-'
+                                              f'{file_name}'),
+                      f'{urls}{tag_["href"]}')
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
@@ -193,6 +208,11 @@ def download_content(url, path):
 
         else:
             if result:
+                print('href else', os.path.join(path, folder_name,
+                                                f'{domain_name}'
+                                                f'{get_new_link_format(paths)}-'
+                                                f'{file_name}'),
+                      tag_["href"])
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}-'
                                           f'{get_new_link_format(paths)}-'
