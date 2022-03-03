@@ -26,7 +26,7 @@ CREATED_DIR_NAME = 'page-loader-hexlet-repl-co_files'
 IMAGE_NAME = 'page-loader-hexlet-repl-co-assets' \
              '-professions-nodejs.png '
 CSS_NAME = 'page-loader-hexlet-repl-co-assets-application.css'
-JS_NAME = 'page-loader-hexlet-repl-co---script.js'
+JS_NAME = 'page-loader-hexlet-repl-co--script.js'
 
 CREATED_HTML_FILE = os.path.join(DOWNLOADS_DIR, CHANGED_HTML_FILE_NAME)
 CREATED_IMAGE = os.path.join(CREATED_DIR_NAME, IMAGE_NAME).strip()
