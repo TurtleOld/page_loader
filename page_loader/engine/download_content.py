@@ -188,7 +188,7 @@ def download_content(url, path):
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
                              get_content(tag["src"]))
-            else:
+            if not result:
                 print("html!:", os.path.join(path, folder_name,
                                              f'{domain_name}-'
                                              f'{get_new_link_format(paths)}-'
