@@ -121,6 +121,9 @@ def change_links(url, path):
         tags = soup.find_all(search_tag)
 
         for tag in tags:
+            if tag[attribute].startswith('http') \
+                    and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
+                print(tag[attribute])
             if os.path.dirname(tag[attribute]) != '/':
                 file_name = f'{os.path.basename(tag[attribute])}'
 
@@ -145,7 +148,7 @@ def change_links(url, path):
     for tag_name, attr in TAGS_ATTRIBUTES.items():
         get_link_to_file(tag_name, attr)
 
-    save_to_file(path_to_file, soup.prettify(formatter='minimal'))
+    save_to_file(path_to_file, soup.prettify(formatter='html5'))
 
 
 def download_content(url, path):
@@ -165,11 +168,6 @@ def download_content(url, path):
         result = re.search(r'.\D{2,4}$', extension)
         if not tag['src'].startswith('http'):
             if result:
-                print('src if', os.path.join(path, folder_name,
-                                             f'{domain_name}'
-                                             f'{get_new_link_format(paths)}-'
-                                             f'{file_name}'),
-                      tag["src"])
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
@@ -186,10 +184,6 @@ def download_content(url, path):
         if tag['src'].startswith('http') \
                 and urlparse(url).netloc == urlparse(tag['src']).netloc:
             if result:
-                print('src else', os.path.join(path, folder_name,
-                                               f'{get_new_link_format(paths)}-'
-                                               f'{file_name}'),
-                      tag["src"])
                 save_to_file(os.path.join(path, folder_name,
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
@@ -209,11 +203,6 @@ def download_content(url, path):
         result = re.search(r'.\D{2,4}$', extension)
         if not tag_['href'].startswith('http'):
             if result:
-                print('href if', os.path.join(path, folder_name,
-                                              f'{domain_name}'
-                                              f'{get_new_link_format(paths)}-'
-                                              f'{file_name}'),
-                      f'{urls}{tag_["href"]}')
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
                                           f'{get_new_link_format(paths)}-'
@@ -229,10 +218,6 @@ def download_content(url, path):
         if tag_['href'].startswith('http') \
                 and urlparse(url).netloc == urlparse(tag_['href']).netloc:
             if result:
-                print('href else', os.path.join(path, folder_name,
-                                                f'{get_new_link_format(paths)}-'
-                                                f'{file_name}'),
-                      tag_["href"])
                 save_to_file(os.path.join(path, folder_name,
                                           f'{get_new_link_format(paths)}-'
                                           f'{file_name}'),
@@ -244,8 +229,3 @@ def download_content(url, path):
                                              f'{get_new_link_format(tag_["href"])}.html'
                                              ),
                              get_content(tag_['href']))
-                print("html!:", os.path.join(path, folder_name,
-                                             f'{domain_name}'
-                                             f'{get_new_link_format(paths)}'
-                                             f'{get_new_link_format(tag_["href"])}.html'
-                                             ))
