@@ -114,6 +114,7 @@ def change_links(url, path):
     path_to_file = get_html_file(url, path)
     preparation = urlparse(url)
     domain_name = get_new_link_format(preparation.netloc)
+    urls = f'{preparation.scheme}://{preparation.netloc}'
     folder_name = create_folder(url, path)
 
     def get_link_to_file(search_tag, attribute):
@@ -121,6 +122,9 @@ def change_links(url, path):
         tags = soup.find_all(search_tag)
 
         for tag in tags:
+            extension = Path(f'{urls}{tag["src"]}').suffix
+            result = re.search(r'.\D{2,4}$', extension)
+            print(result)
             if tag[attribute].startswith('http') \
                     and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
                 print(tag[attribute])
