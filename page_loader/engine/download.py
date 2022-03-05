@@ -14,6 +14,9 @@ def download(url, path=CURRENT_DIRECTORY):
         file_with_content = get_html_file(url, path)
         download_content(url, path)
         change_links(url, path)
+    except FileNotFoundError:
+        log.error(f'No such directory: {path}')
+        raise FileNotFoundError(f'No such directory: {path}')
     except TypeError:
         pass
     else:
