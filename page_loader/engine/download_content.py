@@ -90,6 +90,7 @@ def get_content(url):
                   f'Check the correctness of the entered link! ')
         raise
     else:
+        log.info(f'Code status {response.status_code} for {url}')
         return response.content
 
 
