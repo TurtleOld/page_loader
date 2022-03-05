@@ -122,30 +122,32 @@ def change_links(url, path):
         tags = soup.find_all(search_tag)
 
         for tag in tags:
-            extension = Path(f'{urls}{tag["src"]}').suffix
+            file_name = f'{os.path.basename(tag[attribute])}'
+            paths = os.path.dirname(tag[attribute])
+            extension = Path(f'{urls}{tag[attribute]}').suffix
             result = re.search(r'.\D{2,4}$', extension)
-            print(result)
-            if tag[attribute].startswith('http') \
-                    and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
-                print(tag[attribute])
-            if os.path.dirname(tag[attribute]) != '/':
-                file_name = f'{os.path.basename(tag[attribute])}'
+            if not tag[attribute].startswith('http'):
 
-                paths = os.path.dirname(tag[attribute])
-
-                tag[attribute] = os.path.join(folder_name,
-                                              f'{domain_name}'
-                                              f'{get_new_link_format(paths)}-'
-                                              f'{file_name}')
-            else:
-                file_name = f'{os.path.basename(tag[attribute])}'
-
-                paths = os.path.dirname(tag[attribute])
-
-                tag[attribute] = os.path.join(folder_name,
-                                              f'{domain_name}-'
-                                              f'{get_new_link_format(paths)}-'
-                                              f'{file_name}')
+                if result:
+                    print("1", os.path.join(folder_name,
+                                            f'{domain_name}'
+                                            f'{get_new_link_format(paths)}-'
+                                            f'{file_name}'))
+                    tag[attribute] = os.path.join(folder_name,
+                                                  f'{domain_name}'
+                                                  f'{get_new_link_format(paths)}-'
+                                                  f'{file_name}')
+                else:
+                    print("2", os.path.join(folder_name,
+                                            f'{domain_name}'
+                                            f'{get_new_link_format(paths)}-'
+                                            f'{file_name}'))
+                    tag[attribute] = os.path.join(folder_name,
+                                                  f'{domain_name}'
+                                                  f'{get_new_link_format(paths)}-'
+                                                  f'{file_name}')
+            # if tag[attribute].startswith('http') \
+            #         and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
 
     soup = get_soup(url)
 
@@ -214,9 +216,9 @@ def download_content(url, path):
                              get_content(f'{urls}{tag_["href"]}'))
             else:
                 save_to_file(os.path.join(path, folder_name,
-                                             f'{domain_name}'
-                                             f'{get_new_link_format(tag_["href"])}.html'
-                                             ),
+                                          f'{domain_name}'
+                                          f'{get_new_link_format(tag_["href"])}.html'
+                                          ),
                              get_content(f'{urls}{tag_["href"]}'))
 
         if tag_['href'].startswith('http') \
@@ -228,8 +230,8 @@ def download_content(url, path):
                              get_content(tag_["href"]))
             else:
                 save_to_file(os.path.join(path, folder_name,
-                                             f'{domain_name}'
-                                             f'{get_new_link_format(paths)}'
-                                             f'{get_new_link_format(tag_["href"])}.html'
-                                             ),
+                                          f'{domain_name}'
+                                          f'{get_new_link_format(paths)}'
+                                          f'{get_new_link_format(tag_["href"])}.html'
+                                          ),
                              get_content(tag_['href']))
