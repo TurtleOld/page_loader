@@ -16,16 +16,16 @@ def download(url, path=CURRENT_DIRECTORY):
         change_links(url, path)
     except FileNotFoundError:
         log.error(f'No such directory: {path}')
-        raise FileNotFoundError(f'No such directory: {path}')
+        raise 
     except IOError:
         log.error(f'No such directory: {path}')
-        raise IOError(f'No such directory: {path}')
+        raise 
     except OSError:
         log.error(f'No such directory: {path}')
-        raise OSError(f'No such directory: {path}')
+        raise 
     except PermissionError:
         log.error(f'Permission denied to the specified directory {path}')
-        raise PermissionError(f'Permission denied to the specified directory {path}')
+        raise 
     except TypeError:
         pass
     else:
