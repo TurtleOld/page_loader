@@ -146,9 +146,17 @@ def change_links(url, path):
                                                   f'{domain_name}'
                                                   f'{get_new_link_format(paths)}-'
                                                   f'{file_name}.html')
-            # if tag[attribute].startswith('http') \
-            #         and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
-
+            if tag[attribute].startswith('http') \
+                    and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
+                if result:
+                    tag[attribute] = os.path.join(folder_name,
+                                                  f'{get_new_link_format(paths)}-'
+                                                  f'{file_name}')
+                else:
+                    tag[attribute] = os.path.join(folder_name,
+                                                  f'{domain_name}'
+                                                  f'{get_new_link_format(paths)}'
+                                                  f'{file_name}.html')
     soup = get_soup(url)
 
     for tag_name, attr in TAGS_ATTRIBUTES.items():
