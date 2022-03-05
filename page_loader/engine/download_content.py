@@ -145,7 +145,7 @@ def change_links(url, path):
                     tag[attribute] = os.path.join(folder_name,
                                                   f'{domain_name}'
                                                   f'{get_new_link_format(paths)}-'
-                                                  f'{file_name}')
+                                                  f'{file_name}.html')
             # if tag[attribute].startswith('http') \
             #         and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
 
@@ -154,7 +154,7 @@ def change_links(url, path):
     for tag_name, attr in TAGS_ATTRIBUTES.items():
         get_link_to_file(tag_name, attr)
 
-    save_to_file(path_to_file, soup.prettify(formatter='html5'))
+    save_to_file(path_to_file, soup.prettify(formatter='minimal'))
 
 
 def download_content(url, path):
