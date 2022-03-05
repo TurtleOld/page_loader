@@ -64,31 +64,39 @@ def get_content(url):
     except requests.exceptions.HTTPError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
+        raise requests.exceptions.HTTPError('An HTTP error occurred.')
     except requests.exceptions.SSLError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
+        raise requests.exceptions.SSLError('An SSL error occurred.')
     except requests.exceptions.ConnectionError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
+        raise requests.exceptions.ConnectionError('A Connection error occurred.')
     except requests.RequestException:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
+        raise requests.RequestException('There was an ambiguous exception that occurred while handling your request.')
     except urllib3.util.ssl_:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
+        raise urllib3.util.ssl_('SSL Error')
     except urllib3.exceptions.MaxRetryError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
+        raise urllib3.exceptions.MaxRetryError('Max retries exceeded with url')
     except urllib3.exceptions.NewConnectionError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
+        raise urllib3.exceptions.NewConnectionError('Fail to establish a new connection.')
     except urllib3.exceptions.HTTPError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
+        raise urllib3.exceptions.HTTPError('An HTTP error occurred.')
     except socket.gaierror:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link! ')
-        raise
+        raise socket.gaierror('Failed to execute script')
     else:
         log.info(f'Code status {response.status_code} for {url}')
         return response.content
