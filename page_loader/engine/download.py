@@ -20,6 +20,9 @@ def download(url, path=CURRENT_DIRECTORY):
     except IOError:
         log.error(f'No such directory: {path}')
         raise IOError(f'No such directory: {path}')
+    except OSError:
+        log.error(f'No such directory: {path}')
+        raise OSError(f'No such directory: {path}')
     except TypeError:
         pass
     else:
