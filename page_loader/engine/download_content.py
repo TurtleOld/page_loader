@@ -77,12 +77,11 @@ def get_content(url):
     except requests.RequestException:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
-        raise requests.RequestException('There was an ambiguous exception that '
-                                        'occurred while handling your request.')
+        raise
     except urllib3.util.ssl_:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
-        raise urllib3.util.ssl_
+        raise
     except urllib3.exceptions.MaxRetryError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
@@ -101,7 +100,6 @@ def get_content(url):
                   f'Check the correctness of the entered link! ')
         raise socket.gaierror('Failed to execute script')
     else:
-        log.info(f'Code status {response.status_code} for {url}')
         return response.content
 
 
@@ -183,7 +181,7 @@ def download_content(url, path):
     soup = get_soup(url)
 
     tags_src = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': True})
-    tags_href = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': False})
+    tags_href = soup.find_all(TAGS_ATTRIBUTES.keys(), {'href': True})
 
     for tag in tags_src:
         file_name = f'{os.path.basename(tag["src"])}'
@@ -224,10 +222,12 @@ def download_content(url, path):
 
     for tag_ in tags_href:
         file_name = f'{os.path.basename(tag_["href"])}'
+
         paths = os.path.dirname(tag_['href'])
         extension = Path(f'{urls}{tag_["href"]}').suffix
         result = re.search(r'.\D{2,4}$', extension)
         if not tag_['href'].startswith('http'):
+            print(tag_)
             if result:
                 save_to_file(os.path.join(path, folder_name,
                                           f'{domain_name}'
@@ -244,6 +244,7 @@ def download_content(url, path):
 
         if tag_['href'].startswith('http') \
                 and urlparse(url).netloc == urlparse(tag_['href']).netloc:
+            print(tag_)
             if result:
                 save_to_file(os.path.join(path, folder_name,
                                           f'{get_new_link_format(paths)}-'

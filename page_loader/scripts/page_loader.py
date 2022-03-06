@@ -15,13 +15,11 @@ logging.basicConfig(stream=sys.stdout, level=logging.INFO, format=LOG_FORMAT)
 
 def main():
     args = parse_cli_arguments()
-    # try:
+
     file_path = download(args.url, args.output)
     if file_path is None:
         return
     log.info(f"Page was successfully downloaded into '{file_path}'")
-    # except FileNotFoundError:
-    #     log.error(f'ERROR: No such directory: {args.output}')
 
 
 if __name__ == '__main__':
