@@ -10,7 +10,7 @@ log = logging.getLogger(__name__)
 
 LOG_FORMAT = '%(message)s'
 
-logging.basicConfig(stream=sys.stderr, level=logging.INFO, format=LOG_FORMAT)
+logging.basicConfig(stream=sys.stdout, level=logging.INFO, format=LOG_FORMAT)
 
 
 def main():
