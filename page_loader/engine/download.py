@@ -19,13 +19,7 @@ def download(url, path=CURRENT_DIRECTORY):
         raise 
     except IOError:
         log.error(f'No such directory: {path}')
-        raise 
-    except OSError:
-        log.error(f'No such directory: {path}')
-        raise 
-    except PermissionError:
-        log.error(f'Permission denied to the specified directory {path}')
-        raise 
+        raise
     except TypeError:
         pass
     else:
