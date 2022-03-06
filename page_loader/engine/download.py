@@ -16,7 +16,7 @@ def download(url, path=CURRENT_DIRECTORY):
         change_links(url, path)
     except FileNotFoundError:
         log.error(f'No such directory: {path}')
-        raise 
+        raise
     except IOError:
         log.error(f'No such directory: {path}')
         raise
