@@ -72,11 +72,13 @@ def get_content(url):
     except requests.exceptions.ConnectionError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
-        raise requests.exceptions.ConnectionError('A Connection error occurred.')
+        raise requests.exceptions.ConnectionError(
+            'A Connection error occurred.')
     except requests.RequestException:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
-        raise requests.RequestException('There was an ambiguous exception that occurred while handling your request.')
+        raise requests.RequestException('There was an ambiguous exception that '
+                                        'occurred while handling your request.')
     except urllib3.util.ssl_:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
@@ -88,7 +90,8 @@ def get_content(url):
     except urllib3.exceptions.NewConnectionError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
-        raise urllib3.exceptions.NewConnectionError('Fail to establish a new connection.')
+        raise urllib3.exceptions.NewConnectionError('Fail to establish '
+                                                    'a new connection.')
     except urllib3.exceptions.HTTPError:
         log.error(f'Failed to establish a connection to site: {url}\n'
                   f'Check the correctness of the entered link!')
@@ -138,26 +141,32 @@ def change_links(url, path):
             if not tag[attribute].startswith('http'):
 
                 if result:
-                    tag[attribute] = os.path.join(folder_name,
-                                                  f'{domain_name}'
-                                                  f'{get_new_link_format(paths)}-'
-                                                  f'{file_name}')
+                    tag[attribute] = os.path.join(
+                        folder_name,
+                        f'{domain_name}'
+                        f'{get_new_link_format(paths)}-'
+                        f'{file_name}')
                 else:
-                    tag[attribute] = os.path.join(folder_name,
-                                                  f'{domain_name}'
-                                                  f'{get_new_link_format(paths)}-'
-                                                  f'{file_name}.html')
+                    tag[attribute] = os.path.join(
+                        folder_name,
+                        f'{domain_name}'
+                        f'{get_new_link_format(paths)}-'
+                        f'{file_name}.html')
+
             if tag[attribute].startswith('http') \
                     and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
                 if result:
-                    tag[attribute] = os.path.join(folder_name,
-                                                  f'{get_new_link_format(paths)}-'
-                                                  f'{file_name}')
+                    tag[attribute] = os.path.join(
+                        folder_name,
+                        f'{get_new_link_format(paths)}-'
+                        f'{file_name}')
                 else:
-                    tag[attribute] = os.path.join(folder_name,
-                                                  f'{domain_name}'
-                                                  f'{get_new_link_format(paths)}'
-                                                  f'{file_name}.html')
+                    tag[attribute] = os.path.join(
+                        folder_name,
+                        f'{domain_name}'
+                        f'{get_new_link_format(paths)}'
+                        f'{file_name}.html')
+
     soup = get_soup(url)
 
     for tag_name, attr in TAGS_ATTRIBUTES.items():
@@ -189,12 +198,13 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(f'{urls}{tag["src"]}'))
             else:
-                save_to_file(os.path.join(path, folder_name,
-                                          f'{domain_name}'
-                                          f'{get_new_link_format(paths)}'
-                                          f'{get_new_link_format(tag["src"])}.html'
-                                          ),
-                             get_content(f'{urls}{tag["src"]}'))
+                save_to_file(os.path.join(
+                    path, folder_name,
+                    f'{domain_name}'
+                    f'{get_new_link_format(paths)}'
+                    f'{get_new_link_format(tag["src"])}.html'
+                ),
+                    get_content(f'{urls}{tag["src"]}'))
 
         if tag['src'].startswith('http') \
                 and urlparse(url).netloc == urlparse(tag['src']).netloc:
@@ -204,12 +214,13 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(tag["src"]))
             else:
-                save_to_file(os.path.join(path, folder_name,
-                                          f'{domain_name}'
-                                          f'{get_new_link_format(paths)}'
-                                          f'{get_new_link_format(tag["src"])}.html'
-                                          ),
-                             get_content(tag["src"]))
+                save_to_file(os.path.join(
+                    path, folder_name,
+                    f'{domain_name}'
+                    f'{get_new_link_format(paths)}'
+                    f'{get_new_link_format(tag["src"])}.html'
+                ),
+                    get_content(tag["src"]))
 
     for tag_ in tags_href:
         file_name = f'{os.path.basename(tag_["href"])}'
@@ -224,11 +235,12 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(f'{urls}{tag_["href"]}'))
             else:
-                save_to_file(os.path.join(path, folder_name,
-                                          f'{domain_name}'
-                                          f'{get_new_link_format(tag_["href"])}.html'
-                                          ),
-                             get_content(f'{urls}{tag_["href"]}'))
+                save_to_file(os.path.join(
+                    path, folder_name,
+                    f'{domain_name}'
+                    f'{get_new_link_format(tag_["href"])}.html'
+                ),
+                    get_content(f'{urls}{tag_["href"]}'))
 
         if tag_['href'].startswith('http') \
                 and urlparse(url).netloc == urlparse(tag_['href']).netloc:
@@ -238,9 +250,10 @@ def download_content(url, path):
                                           f'{file_name}'),
                              get_content(tag_["href"]))
             else:
-                save_to_file(os.path.join(path, folder_name,
-                                          f'{domain_name}'
-                                          f'{get_new_link_format(paths)}'
-                                          f'{get_new_link_format(tag_["href"])}.html'
-                                          ),
-                             get_content(tag_['href']))
+                save_to_file(os.path.join(
+                    path, folder_name,
+                    f'{domain_name}'
+                    f'{get_new_link_format(paths)}'
+                    f'{get_new_link_format(tag_["href"])}.html'
+                ),
+                    get_content(tag_['href']))
