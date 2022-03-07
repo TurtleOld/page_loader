@@ -1,10 +1,18 @@
+import logging
+import os
+import re
 from pathlib import Path
 from time import sleep
+from urllib.parse import urlparse
 
 from progress.bar import ChargingBar
 
 from page_loader.engine.dicts import TAGS_ATTRIBUTES
-from page_loader.engine.tools import *
+from page_loader.engine.tools import create_folder
+from page_loader.engine.tools import get_content
+from page_loader.engine.tools import get_new_link_format
+from page_loader.engine.tools import get_soup
+from page_loader.engine.tools import save_to_file
 
 log = logging.getLogger(__name__)
 

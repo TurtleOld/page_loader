@@ -1,7 +1,14 @@
+import os
+import re
 from pathlib import Path
+from urllib.parse import urlparse
 
 from page_loader.engine.dicts import TAGS_ATTRIBUTES
-from page_loader.engine.tools import *
+from page_loader.engine.tools import create_folder
+from page_loader.engine.tools import get_html_file_with_content
+from page_loader.engine.tools import get_new_link_format
+from page_loader.engine.tools import get_soup
+from page_loader.engine.tools import save_to_file
 
 
 def change_links(url, path):
