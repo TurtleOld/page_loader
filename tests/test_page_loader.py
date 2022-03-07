@@ -17,14 +17,13 @@ URL_IMAGE = os.path.join(URL, INTERNET_PATH_IMAGE)
 URL_CSS = os.path.join(URL, INTERNET_PATH_CSS)
 URL_JS = os.path.join(URL, INTERNET_PATH_JS)
 
-PATH_ORIGINAL = os.path.join('fixtures', 'downloads')
-DOWNLOADS_DIR = os.path.join('fixtures', 'downloads', 'changed')
+PATH_ORIGINAL = os.path.join('tests', 'fixtures', 'downloads')
+DOWNLOADS_DIR = os.path.join('tests', 'fixtures', 'downloads', 'changed')
 
 HTML_FILE_NAME = os.path.join(PATH_ORIGINAL, 'page-loader-hexlet-repl-co.html')
 CHANGED_HTML_FILE_NAME = 'page-loader-hexlet-repl-co.html'
 CREATED_DIR_NAME = 'page-loader-hexlet-repl-co_files'
-IMAGE_NAME = 'page-loader-hexlet-repl-co-assets' \
-             '-professions-nodejs.png '
+IMAGE_NAME = 'page-loader-hexlet-repl-co-assets-professions-nodejs.png'
 CSS_NAME = 'page-loader-hexlet-repl-co-assets-application.css'
 JS_NAME = 'page-loader-hexlet-repl-co--script.js'
 
@@ -75,7 +74,7 @@ def test_download_content(expected):
     (CHANGED_HTML_FILE_NAME, HTML_FILE_NAME),
 ])
 def test_change_html_file(new_file, old_file):
-    with Mocker(real_http=True) as mock:
+    with Mocker() as mock:
         mock.get(URL, content=read_file(CREATED_HTML_FILE))
         with tempfile.TemporaryDirectory() as directory:
             download(URL, directory)
