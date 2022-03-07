@@ -2,8 +2,8 @@ import logging
 import os
 
 from page_loader.engine.change_links import change_links
-from page_loader.engine.download_content import get_html_file_with_content, \
-    download_content
+from page_loader.engine.download_content import download_content
+from page_loader.engine.tools import get_html_file_with_content
 
 log = logging.getLogger(__name__)
 

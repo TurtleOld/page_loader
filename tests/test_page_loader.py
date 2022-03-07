@@ -6,7 +6,7 @@ import requests
 from requests_mock import Mocker
 
 from page_loader import download
-from page_loader.engine.download_content import get_content, create_folder
+from page_loader.engine.tools import create_folder, get_content
 
 URL = 'https://page-loader.hexlet.repl.co'
 INVALID_URL = 'https://badsite.com'
