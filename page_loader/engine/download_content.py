@@ -178,83 +178,129 @@ def download_content(url, path):
     preparation = urlparse(url)
     domain_name = get_new_link_format(preparation.netloc)
     urls = f'{preparation.scheme}://{preparation.netloc}'
+    # soup = get_soup(url)
+    # tags = soup.find_all(TAGS_ATTRIBUTES.keys())
+    # print(tags)
+
+    def get_link_to_file(search_tag, attribute):
+
+        tags = soup.find_all(search_tag)
+
+        for tag in tags:
+            file_name = f'{os.path.basename(tag[attribute])}'
+            paths = os.path.dirname(tag[attribute])
+            extension = Path(f'{urls}{tag[attribute]}').suffix
+            result = re.search(r'.\D{2,4}$', extension)
+            if not tag[attribute].startswith('http'):
+                if result:
+                    save_to_file(os.path.join(path, folder_name,
+                                              f'{domain_name}'
+                                              f'{get_new_link_format(paths)}-'
+                                              f'{file_name}'),
+                                 get_content(f'{urls}{tag[attribute]}'))
+                else:
+                    save_to_file(os.path.join(
+                        path, folder_name,
+                        f'{domain_name}'
+                        f'{get_new_link_format(paths)}'
+                        f'{get_new_link_format(tag[attribute])}.html'
+                    ),
+                        get_content(f'{urls}{tag[attribute]}'))
+
+            if tag[attribute].startswith('http') \
+                    and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
+                if result:
+                    save_to_file(os.path.join(path, folder_name,
+                                              f'{get_new_link_format(paths)}-'
+                                              f'{file_name}'),
+                                 get_content(tag[attribute]))
+                else:
+                    save_to_file(os.path.join(
+                        path, folder_name,
+                        f'{domain_name}'
+                        f'{get_new_link_format(paths)}'
+                        f'{get_new_link_format(tag[attribute])}.html'
+                    ),
+                        get_content(tag[attribute]))
+
     soup = get_soup(url)
 
-    tags_src = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': True})
-    tags_href = soup.find_all(TAGS_ATTRIBUTES.keys(), {'href': True})
-
-    for tag in tags_src:
-        file_name = f'{os.path.basename(tag["src"])}'
-        paths = os.path.dirname(tag['src'])
-        extension = Path(f'{urls}{tag["src"]}').suffix
-        result = re.search(r'.\D{2,4}$', extension)
-        if not tag['src'].startswith('http'):
-            if result:
-                save_to_file(os.path.join(path, folder_name,
-                                          f'{domain_name}'
-                                          f'{get_new_link_format(paths)}-'
-                                          f'{file_name}'),
-                             get_content(f'{urls}{tag["src"]}'))
-            else:
-                save_to_file(os.path.join(
-                    path, folder_name,
-                    f'{domain_name}'
-                    f'{get_new_link_format(paths)}'
-                    f'{get_new_link_format(tag["src"])}.html'
-                ),
-                    get_content(f'{urls}{tag["src"]}'))
-
-        if tag['src'].startswith('http') \
-                and urlparse(url).netloc == urlparse(tag['src']).netloc:
-            if result:
-                save_to_file(os.path.join(path, folder_name,
-                                          f'{get_new_link_format(paths)}-'
-                                          f'{file_name}'),
-                             get_content(tag["src"]))
-            else:
-                save_to_file(os.path.join(
-                    path, folder_name,
-                    f'{domain_name}'
-                    f'{get_new_link_format(paths)}'
-                    f'{get_new_link_format(tag["src"])}.html'
-                ),
-                    get_content(tag["src"]))
-
-    for tag_ in tags_href:
-        file_name = f'{os.path.basename(tag_["href"])}'
-
-        paths = os.path.dirname(tag_['href'])
-        extension = Path(f'{urls}{tag_["href"]}').suffix
-        result = re.search(r'.\D{2,4}$', extension)
-        if not tag_['href'].startswith('http'):
-            print(tag_)
-            if result:
-                save_to_file(os.path.join(path, folder_name,
-                                          f'{domain_name}'
-                                          f'{get_new_link_format(paths)}-'
-                                          f'{file_name}'),
-                             get_content(f'{urls}{tag_["href"]}'))
-            else:
-                save_to_file(os.path.join(
-                    path, folder_name,
-                    f'{domain_name}'
-                    f'{get_new_link_format(tag_["href"])}.html'
-                ),
-                    get_content(f'{urls}{tag_["href"]}'))
-
-        if tag_['href'].startswith('http') \
-                and urlparse(url).netloc == urlparse(tag_['href']).netloc:
-            print(tag_)
-            if result:
-                save_to_file(os.path.join(path, folder_name,
-                                          f'{get_new_link_format(paths)}-'
-                                          f'{file_name}'),
-                             get_content(tag_["href"]))
-            else:
-                save_to_file(os.path.join(
-                    path, folder_name,
-                    f'{domain_name}'
-                    f'{get_new_link_format(paths)}'
-                    f'{get_new_link_format(tag_["href"])}.html'
-                ),
-                    get_content(tag_['href']))
+    for tag_name, attr in TAGS_ATTRIBUTES.items():
+        get_link_to_file(tag_name, attr)
+    # tags_src = soup.find_all(TAGS_ATTRIBUTES.keys(), {'src': True})
+    # tags_href = soup.find_all(TAGS_ATTRIBUTES.keys(), {'href': True})
+    # 
+    # for tag in tags_src:
+    #     file_name = f'{os.path.basename(tag["src"])}'
+    #     paths = os.path.dirname(tag['src'])
+    #     extension = Path(f'{urls}{tag["src"]}').suffix
+    #     result = re.search(r'.\D{2,4}$', extension)
+    #     if not tag['src'].startswith('http'):
+    #         if result:
+    #             save_to_file(os.path.join(path, folder_name,
+    #                                       f'{domain_name}'
+    #                                       f'{get_new_link_format(paths)}-'
+    #                                       f'{file_name}'),
+    #                          get_content(f'{urls}{tag["src"]}'))
+    #         else:
+    #             save_to_file(os.path.join(
+    #                 path, folder_name,
+    #                 f'{domain_name}'
+    #                 f'{get_new_link_format(paths)}'
+    #                 f'{get_new_link_format(tag["src"])}.html'
+    #             ),
+    #                 get_content(f'{urls}{tag["src"]}'))
+    # 
+    #     if tag['src'].startswith('http') \
+    #             and urlparse(url).netloc == urlparse(tag['src']).netloc:
+    #         if result:
+    #             save_to_file(os.path.join(path, folder_name,
+    #                                       f'{get_new_link_format(paths)}-'
+    #                                       f'{file_name}'),
+    #                          get_content(tag["src"]))
+    #         else:
+    #             save_to_file(os.path.join(
+    #                 path, folder_name,
+    #                 f'{domain_name}'
+    #                 f'{get_new_link_format(paths)}'
+    #                 f'{get_new_link_format(tag["src"])}.html'
+    #             ),
+    #                 get_content(tag["src"]))
+    # 
+    # for tag_ in tags_href:
+    #     file_name = f'{os.path.basename(tag_["href"])}'
+    # 
+    #     paths = os.path.dirname(tag_['href'])
+    #     extension = Path(f'{urls}{tag_["href"]}').suffix
+    #     result = re.search(r'.\D{2,4}$', extension)
+    #     if not tag_['href'].startswith('http'):
+    #         if result:
+    #             save_to_file(os.path.join(path, folder_name,
+    #                                       f'{domain_name}'
+    #                                       f'{get_new_link_format(paths)}-'
+    #                                       f'{file_name}'),
+    #                          get_content(f'{urls}{tag_["href"]}'))
+    #         else:
+    #             save_to_file(os.path.join(
+    #                 path, folder_name,
+    #                 f'{domain_name}'
+    #                 f'{get_new_link_format(tag_["href"])}.html'
+    #             ),
+    #                 get_content(f'{urls}{tag_["href"]}'))
+    # 
+    #     if tag_['href'].startswith('http') \
+    #             and urlparse(url).netloc == urlparse(tag_['href']).netloc:
+    # 
+    #         if result:
+    #             save_to_file(os.path.join(path, folder_name,
+    #                                       f'{get_new_link_format(paths)}-'
+    #                                       f'{file_name}'),
+    #                          get_content(tag_["href"]))
+    #         else:
+    #             save_to_file(os.path.join(
+    #                 path, folder_name,
+    #                 f'{domain_name}'
+    #                 f'{get_new_link_format(paths)}'
+    #                 f'{get_new_link_format(tag_["href"])}.html'
+    #             ),
+    #                 get_content(tag_['href']))
