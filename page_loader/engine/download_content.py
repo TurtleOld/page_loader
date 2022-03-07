@@ -3,12 +3,13 @@ import os
 import re
 import socket
 from pathlib import Path
+from time import sleep
 from urllib.parse import urlparse
 
 import requests
 import urllib3.exceptions
 from bs4 import BeautifulSoup
-from progress.bar import IncrementalBar
+from progress.bar import ChargingBar
 
 TAGS_ATTRIBUTES = {
     'img': 'src',
@@ -183,9 +184,10 @@ def download_content(url, path):
     def save_content_to_file(search_tag, attribute):
 
         tags = soup.find_all(search_tag)
-        bar = IncrementalBar('Download:', max=len(tags), suffix=tags)
-        for tag in tags:
+        bar = ChargingBar('Loading', max=len(tags),
+                          fill='#', suffix='%(percent)d%%')
 
+        for tag in tags:
             file_name = f'{os.path.basename(tag[attribute])}'
             paths = os.path.dirname(tag[attribute])
             extension = Path(f'{urls}{tag[attribute]}').suffix
@@ -194,16 +196,15 @@ def download_content(url, path):
             if not tag[attribute].startswith('http'):
 
                 if result:
-
                     save_to_file(os.path.join(path, folder_name,
                                               f'{domain_name}'
                                               f'{get_new_link_format(paths)}-'
                                               f'{file_name}'),
                                  get_content(f'{urls}{tag[attribute]}'))
                     bar.next()
+                    sleep(1)
 
                 else:
-
                     save_to_file(os.path.join(
                         path, folder_name,
                         f'{domain_name}'
@@ -211,20 +212,20 @@ def download_content(url, path):
                     ),
                         get_content(f'{urls}{tag[attribute]}'))
                     bar.next()
+                    sleep(1)
 
             if tag[attribute].startswith('http') \
                     and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
 
                 if result:
-
                     save_to_file(os.path.join(path, folder_name,
                                               f'{get_new_link_format(paths)}-'
                                               f'{file_name}'),
                                  get_content(tag[attribute]))
                     bar.next()
+                    sleep(1)
 
                 else:
-
                     save_to_file(os.path.join(
                         path, folder_name,
                         f'{domain_name}'
@@ -233,8 +234,9 @@ def download_content(url, path):
                     ),
                         get_content(tag[attribute]))
                     bar.next()
-            bar.finish()
+                    sleep(1)
 
+            bar.finish()
     soup = get_soup(url)
 
     for tag_name, attr in TAGS_ATTRIBUTES.items():
