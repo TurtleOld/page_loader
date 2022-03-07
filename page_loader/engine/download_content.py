@@ -203,13 +203,11 @@ def download_content(url, path):
                     print(os.path.join(
                         path, folder_name,
                         f'{domain_name}'
-                        f'{get_new_link_format(paths)}'
                         f'{get_new_link_format(tag[attribute])}.html'
                     ))
                     save_to_file(os.path.join(
                         path, folder_name,
                         f'{domain_name}'
-                        f'{get_new_link_format(paths)}'
                         f'{get_new_link_format(tag[attribute])}.html'
                     ),
                         get_content(f'{urls}{tag[attribute]}'))
