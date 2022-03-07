@@ -216,10 +216,10 @@ def download_content(url, path):
                     and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
                 if result:
                     print(os.path.join(path, folder_name,
-                                              f'{get_new_link_format(paths)}'
+                                              f'{get_new_link_format(paths)}-'
                                               f'{file_name}'))
                     save_to_file(os.path.join(path, folder_name,
-                                              f'{get_new_link_format(paths)}'
+                                              f'{get_new_link_format(paths)}-'
                                               f'{file_name}'),
                                  get_content(tag[attribute]))
                 else:
