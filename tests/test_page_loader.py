@@ -1,6 +1,5 @@
 import os
 import tempfile
-from urllib.parse import urljoin
 
 import pytest
 import requests
@@ -70,22 +69,6 @@ def test_download_content(expected):
             assert len(
                 os.listdir(os.path.join(directory, CREATED_DIR_NAME))) == 4
             assert os.path.exists(expected_path)
-
-
-path = '/notfound'
-code = 404
-
-
-@pytest.mark.parametrize(
-    'path,code',
-    [('/notfound', 404), ('/internalerror', 500)]
-)
-def test_response_with_error(path, code):
-    url = urljoin(URL, path)
-
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        process = download(url, tmpdirname)
-        assert process.returncode != 0
 
 
 @pytest.mark.parametrize('new_file, old_file', [
