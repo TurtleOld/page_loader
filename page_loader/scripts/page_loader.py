@@ -19,7 +19,7 @@ def main():
     file_path = download(args.url, args.output)
     if file_path is None:
         return
-    log.info(f"Page was successfully downloaded into '{file_path}'")
+    print(f"Page was successfully downloaded into '{file_path}'")
 
 
 if __name__ == '__main__':
