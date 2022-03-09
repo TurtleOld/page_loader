@@ -10,16 +10,20 @@ log = logging.getLogger(__name__)
 
 LOG_FORMAT = '%(message)s'
 
-logging.basicConfig(stream=sys.stdout, level=logging.INFO, format=LOG_FORMAT)
+logging.basicConfig(stream=sys.stderr, level=logging.INFO, format=LOG_FORMAT)
 
 
 def main():
-    args = parse_cli_arguments()
-
-    file_path = download(args.url, args.output)
-    if file_path is None:
-        return
-    print(f"Page was successfully downloaded into '{file_path}'")
+    try:
+        args = parse_cli_arguments()
+        file_path = download(args.url, args.output)
+        if file_path is None:
+            return
+        print(f"Page was successfully downloaded into '{file_path}'")
+        sys.exit(0)
+    except Exception as error:
+        log.error(error)
+        sys.exit(1)
 
 
 if __name__ == '__main__':

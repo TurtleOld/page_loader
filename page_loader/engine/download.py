@@ -18,7 +18,5 @@ def download(url, path=CURRENT_DIRECTORY):
     except FileNotFoundError:
         log.error(f'No such directory: {path}')
         raise
-    except TypeError:
-        pass
     else:
         return file_with_content

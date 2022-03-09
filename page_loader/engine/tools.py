@@ -1,11 +1,9 @@
 import logging
 import os
 import re
-import socket
 from urllib.parse import urlparse
 
 import requests
-import urllib3
 from bs4 import BeautifulSoup
 
 log = logging.getLogger(__name__)
@@ -62,7 +60,7 @@ def save_to_file(path_to_file, data):
 
     except PermissionError:
         log.error(f'Permission denied to the specified directory '
-                  f'{path_to_file}')
+                  f'{os.path.dirname(path_to_file)}')
         raise
 
 
@@ -91,49 +89,33 @@ def get_content(url):
     :return: Content of the Internet page.
     """
     try:
-        response = requests.get(url)
+        response = requests.get(url, timeout=3)
         response.raise_for_status()
-
-    except requests.exceptions.HTTPError:
-        log.error(f'Failed to establish a connection to site: {url}\n'
-                  f'Check the correctness of the entered link!')
-        raise requests.exceptions.HTTPError('An HTTP error occurred.')
-    except requests.exceptions.SSLError:
-        log.error(f'Failed to establish a connection to site: {url}\n'
-                  f'Check the correctness of the entered link!')
-        raise requests.exceptions.SSLError('An SSL error occurred.')
     except requests.exceptions.ConnectionError:
-        log.error(f'Failed to establish a connection to site: {url}\n'
-                  f'Check the correctness of the entered link!')
         raise requests.exceptions.ConnectionError(
-            'A Connection error occurred.')
-    except requests.RequestException:
-        log.error(f'Failed to establish a connection to site: {url}\n'
-                  f'Check the correctness of the entered link!')
-        raise
-    except urllib3.util.ssl_:
-        log.error(f'Failed to establish a connection to site: {url}\n'
-                  f'Check the correctness of the entered link!')
-        raise
-    except urllib3.exceptions.MaxRetryError:
-        log.error(f'Failed to establish a connection to site: {url}\n'
-                  f'Check the correctness of the entered link!')
-        raise urllib3.exceptions.MaxRetryError('Max retries exceeded with url')
-    except urllib3.exceptions.NewConnectionError:
-        log.error(f'Failed to establish a connection to site: {url}\n'
-                  f'Check the correctness of the entered link!')
-        raise urllib3.exceptions.NewConnectionError('Fail to establish '
-                                                    'a new connection.')
-    except urllib3.exceptions.HTTPError:
-        log.error(f'Failed to establish a connection to site: {url}\n'
-                  f'Check the correctness of the entered link!')
-        raise urllib3.exceptions.HTTPError('An HTTP error occurred.')
-    except socket.gaierror:
-        log.error(f'Failed to establish a connection to site: {url}\n'
-                  f'Check the correctness of the entered link! ')
-        raise socket.gaierror('Failed to execute script')
-    else:
-        return response.content
+            f'Failed to establish a connection to site: {url}\n'
+            f'Please check your a connection to Ethernet'
+        )
+    except requests.exceptions.Timeout:
+        raise requests.exceptions.ConnectionError(
+            f'Failed to establish a connection to site: {url}\n'
+            f'Response timeout expired'
+        )
+    except requests.exceptions.TooManyRedirects:
+        raise requests.exceptions.TooManyRedirects(
+            f'Failed to establish a connection to site: {url}\n'
+            f'Too many redirects'
+        )
+    except requests.exceptions.HTTPError:
+        raise requests.exceptions.HTTPError(
+            f'Failed to establish a connection to site: {url}\n'
+            f'HTTP Error occurred'
+        )
+    except requests.exceptions.RequestException:
+        raise requests.exceptions.RequestException(
+            f'Failed to establish a connection to site: {url}\n'
+            f'Other request exceptions occurred'
+        )
 
 
 def get_soup(url):
