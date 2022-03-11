@@ -36,9 +36,8 @@ def create_folder(url, path) -> str:
         if not os.path.isdir(full_path):
             try:
                 os.mkdir(full_path)
-            except IOError:
-                log.error(f'Failed to create folder {folder_name}')
-                raise
+            except OSError:
+                raise OSError(f'Failed to create folder {folder_name}')
 
         return folder_name
 
@@ -91,31 +90,34 @@ def get_content(url):
     try:
         response = requests.get(url, timeout=3)
         response.raise_for_status()
-    except requests.exceptions.ConnectionError:
-        raise requests.exceptions.ConnectionError(
-            f'Failed to establish a connection to site: {url}\n'
-            f'Please check your a connection to Ethernet'
-        )
-    except requests.exceptions.Timeout:
+    except requests.exceptions.ConnectTimeout:
         raise requests.exceptions.ConnectionError(
             f'Failed to establish a connection to site: {url}\n'
             f'Response timeout expired'
         )
+
     except requests.exceptions.TooManyRedirects:
         raise requests.exceptions.TooManyRedirects(
             f'Failed to establish a connection to site: {url}\n'
             f'Too many redirects'
         )
-    except requests.exceptions.HTTPError:
+    except requests.exceptions.HTTPError as http_error:
         raise requests.exceptions.HTTPError(
             f'Failed to establish a connection to site: {url}\n'
             f'HTTP Error occurred'
+        )
+    except requests.exceptions.ConnectionError:
+        raise requests.exceptions.ConnectionError(
+            f'Failed to establish a connection to site: {url}\n'
+            f'Please check your a connection to Ethernet'
         )
     except requests.exceptions.RequestException:
         raise requests.exceptions.RequestException(
             f'Failed to establish a connection to site: {url}\n'
             f'Other request exceptions occurred'
         )
+    else:
+        return response.content
 
 
 def get_soup(url):
@@ -124,5 +126,5 @@ def get_soup(url):
     :param url: Link to the website.
     :return: File Contents
     """
-    file_content = get_content(url)
-    return BeautifulSoup(file_content, 'html.parser')
+    content = get_content(url)
+    return BeautifulSoup(content, 'html.parser')

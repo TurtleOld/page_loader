@@ -1,24 +1,21 @@
 import os
-import tempfile
 
 import pytest
-import requests
-from requests_mock import Mocker
+from requests.exceptions import HTTPError, ConnectionError, \
+    RequestException, TooManyRedirects, ConnectTimeout
 
 from page_loader import download
-from page_loader.engine.tools import create_folder, get_content
 
 URL = 'https://page-loader.hexlet.repl.co'
-INVALID_URL = 'https://badsite.com'
-INTERNET_PATH_IMAGE = 'assets/professions/nodejs.png'
-INTERNET_PATH_CSS = 'assets/application.css'
-INTERNET_PATH_JS = 'script.js'
+INTERNET_PATH_IMAGE = '/assets/professions/nodejs.png'
+INTERNET_PATH_CSS = '/assets/application.css'
+INTERNET_PATH_JS = '/script.js'
 URL_IMAGE = os.path.join(URL, INTERNET_PATH_IMAGE)
 URL_CSS = os.path.join(URL, INTERNET_PATH_CSS)
 URL_JS = os.path.join(URL, INTERNET_PATH_JS)
 
-PATH_ORIGINAL = os.path.join('tests', 'fixtures', 'downloads')
-DOWNLOADS_DIR = os.path.join('tests', 'fixtures', 'downloads', 'changed')
+PATH_ORIGINAL = os.path.join('fixtures', 'downloads')
+DOWNLOADS_DIR = os.path.join('fixtures', 'downloads', 'changed')
 
 HTML_FILE_NAME = os.path.join(PATH_ORIGINAL, 'page-loader-hexlet-repl-co.html')
 CHANGED_HTML_FILE_NAME = 'page-loader-hexlet-repl-co.html'
@@ -42,60 +39,65 @@ def read_file(file):
         return f.read()
 
 
-def test_folder_creation():
-    folder = create_folder(URL, DOWNLOADS_DIR)
-    assert os.path.join(DOWNLOADS_DIR, folder) == os.path.join(DOWNLOADS_DIR,
-                                                               CREATED_DIR_NAME)
-
-
-@pytest.mark.parametrize('expected', [
+@pytest.mark.parametrize('expect', [
     CHANGED_HTML_FILE_NAME,
     CREATED_DIR_NAME,
     CREATED_IMAGE,
     CREATED_CSS,
     CREATED_JS
 ])
-def test_download_content(expected):
-    with Mocker(real_http=True) as mock:
-        mock.get(URL, content=read_file(HTML_FILE_NAME))
-        mock.get(URL_IMAGE, content=read_file(EXPECTED_IMAGE))
-        mock.get(URL_CSS, content=read_file(EXPECTED_CSS))
-        mock.get(URL_JS, content=read_file(EXPECTED_JS))
-        with tempfile.TemporaryDirectory() as directory:
-            assert not os.listdir(directory)
-            download(URL, directory)
-            expected_path = os.path.join(directory, expected)
-            assert len(
-                os.listdir(os.path.join(directory, CREATED_DIR_NAME))) == 4
-            assert os.path.exists(expected_path)
+def test_download_content(expect, tmpdir, requests_mock):
+    requests_mock.get(URL, content=read_file(HTML_FILE_NAME))
+    requests_mock.get(URL_IMAGE, content=read_file(EXPECTED_IMAGE))
+    requests_mock.get(URL_CSS, content=read_file(EXPECTED_CSS))
+    requests_mock.get(URL_JS, content=read_file(EXPECTED_JS))
+    assert not os.listdir(tmpdir)
+    download(URL, tmpdir)
+    expected_path = os.path.join(tmpdir, expect)
+    assert len(
+        os.listdir(os.path.join(tmpdir, CREATED_DIR_NAME))) == 4
+    assert os.path.exists(expected_path)
 
 
-@pytest.mark.parametrize('new_file, old_file', [
-    (CHANGED_HTML_FILE_NAME, HTML_FILE_NAME),
+@pytest.mark.parametrize('new_file, expect_file', [
+    (CHANGED_HTML_FILE_NAME, CREATED_HTML_FILE),
+    (CREATED_IMAGE, EXPECTED_IMAGE),
 ])
-def test_change_html_file(new_file, old_file):
-    with Mocker() as mock:
-        mock.get(URL, content=read_file(CREATED_HTML_FILE))
-        with tempfile.TemporaryDirectory() as directory:
-            download(URL, directory)
-            new_file = os.path.join(directory, new_file)
-            assert read_file(new_file) != read_file(old_file)
+def test_link_is_download(new_file, expect_file, tmpdir, requests_mock):
+    requests_mock.get(URL, content=read_file(HTML_FILE_NAME))
+    requests_mock.get(URL_IMAGE, content=read_file(EXPECTED_IMAGE))
+    requests_mock.get(URL_CSS, content=read_file(EXPECTED_CSS))
+    requests_mock.get(URL_JS, content=read_file(EXPECTED_JS))
+    download(URL, tmpdir)
+    new_file = os.path.join(tmpdir, new_file)
+    assert read_file(new_file) == read_file(expect_file)
 
 
-def test_connection_error(requests_mock: Mocker):
-    requests_mock.get(INVALID_URL, exc=requests.exceptions.ConnectionError)
+expected = [
+    (ConnectTimeout, f'Failed to establish a connection to site: {URL}\n'
+                     f'Response timeout expired'),
+    (HTTPError, f'Failed to establish a connection to site: {URL}\n'
+                f'HTTP Error occurred'),
+    (ConnectionError, f'Failed to establish a connection to site: {URL}\n'
+                      f'Please check your a connection to Ethernet'),
+    (TooManyRedirects, f'Failed to establish a connection to site: {URL}\n'
+                       f'Too many redirects'),
+    (RequestException, f'Failed to establish a connection to site: {URL}\n'
+                       f'Other request exceptions occurred'),
+]
 
-    with tempfile.TemporaryDirectory() as tmp_dir_name:
-        assert not os.listdir(tmp_dir_name)
 
-        with pytest.raises(Exception):
-            assert download(INVALID_URL, tmp_dir_name)
+@pytest.mark.parametrize('connection_error_excepted, expected_value', expected)
+def test_connection(connection_error_excepted, expected_value, tmpdir,
+                    requests_mock):
+    with pytest.raises(Exception) as error:
+        requests_mock.get(URL, exc=connection_error_excepted)
+        download(URL, tmpdir)
+    assert str(error.value) == expected_value
 
-        assert not os.listdir(tmp_dir_name)
 
-
-def test_get_content():
-    try:
-        get_content(URL)
-    except Exception as exc:
-        assert pytest.fail(exc, pytrace=True)
+def test_denied_to_folder():
+    with pytest.raises(OSError) as err:
+        directory = os.path.join(PATH_ORIGINAL, CREATED_DIR_NAME, 'not_exist')
+        download(URL, directory)
+    assert str(err)

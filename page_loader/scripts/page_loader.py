@@ -22,7 +22,7 @@ def main():
         print(f"Page was successfully downloaded into '{file_path}'")
         sys.exit(0)
     except Exception as error:
-        log.error(error)
+        str(error)
         sys.exit(1)
 
 

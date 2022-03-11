@@ -67,4 +67,4 @@ def change_links(url, path):
     for tag_name, attr in TAGS_ATTRIBUTES.items():
         get_link_to_file(tag_name, attr)
 
-    save_to_file(path_to_file, content_soup.prettify(formatter='minimal'))
+    save_to_file(path_to_file, content_soup.prettify(formatter='html5'))
