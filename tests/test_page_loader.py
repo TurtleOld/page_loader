@@ -1,4 +1,5 @@
 import os
+import stat
 
 import pytest
 from requests.exceptions import HTTPError, ConnectionError, \
@@ -10,9 +11,11 @@ URL = 'https://page-loader.hexlet.repl.co'
 INTERNET_PATH_IMAGE = '/assets/professions/nodejs.png'
 INTERNET_PATH_CSS = '/assets/application.css'
 INTERNET_PATH_JS = '/script.js'
+INTERNET_PATH_FILE = '/courses'
 URL_IMAGE = os.path.join(URL, INTERNET_PATH_IMAGE)
 URL_CSS = os.path.join(URL, INTERNET_PATH_CSS)
 URL_JS = os.path.join(URL, INTERNET_PATH_JS)
+URL_FILE = os.path.join(URL, INTERNET_PATH_FILE)
 
 PATH_ORIGINAL = os.path.join('fixtures', 'downloads')
 DOWNLOADS_DIR = os.path.join('fixtures', 'downloads', 'changed')
@@ -23,15 +26,18 @@ CREATED_DIR_NAME = 'page-loader-hexlet-repl-co_files'
 IMAGE_NAME = 'page-loader-hexlet-repl-co-assets-professions-nodejs.png'
 CSS_NAME = 'page-loader-hexlet-repl-co-assets-application.css'
 JS_NAME = 'page-loader-hexlet-repl-co--script.js'
+FILE_NAME = 'page-loader-hexlet-repl-co-courses.html'
 
 CREATED_HTML_FILE = os.path.join(DOWNLOADS_DIR, CHANGED_HTML_FILE_NAME)
 CREATED_IMAGE = os.path.join(CREATED_DIR_NAME, IMAGE_NAME).strip()
 CREATED_CSS = os.path.join(CREATED_DIR_NAME, CSS_NAME).strip()
 CREATED_JS = os.path.join(CREATED_DIR_NAME, JS_NAME).strip()
+CREATED_FILE = os.path.join(CREATED_DIR_NAME, FILE_NAME).strip()
 
 EXPECTED_IMAGE = os.path.join(DOWNLOADS_DIR, CREATED_IMAGE).strip()
 EXPECTED_CSS = os.path.join(DOWNLOADS_DIR, CREATED_CSS).strip()
 EXPECTED_JS = os.path.join(DOWNLOADS_DIR, CREATED_JS).strip()
+EXPECTED_FILE = os.path.join(DOWNLOADS_DIR, CREATED_FILE).strip()
 
 
 def read_file(file):
@@ -44,13 +50,15 @@ def read_file(file):
     CREATED_DIR_NAME,
     CREATED_IMAGE,
     CREATED_CSS,
-    CREATED_JS
+    CREATED_JS,
+    CREATED_FILE
 ])
 def test_download_content(expect, tmpdir, requests_mock):
     requests_mock.get(URL, content=read_file(HTML_FILE_NAME))
     requests_mock.get(URL_IMAGE, content=read_file(EXPECTED_IMAGE))
     requests_mock.get(URL_CSS, content=read_file(EXPECTED_CSS))
     requests_mock.get(URL_JS, content=read_file(EXPECTED_JS))
+    requests_mock.get(URL_FILE, content=read_file(EXPECTED_FILE))
     assert not os.listdir(tmpdir)
     download(URL, tmpdir)
     expected_path = os.path.join(tmpdir, expect)
@@ -96,8 +104,15 @@ def test_connection(connection_error_excepted, expected_value, tmpdir,
     assert str(error.value) == expected_value
 
 
-def test_denied_to_folder():
+def test_not_exist_denied_to_folder():
     with pytest.raises(OSError) as err:
         directory = os.path.join(PATH_ORIGINAL, CREATED_DIR_NAME, 'not_exist')
         download(URL, directory)
     assert str(err)
+
+
+def test_denied_to_folder(tmpdir, requests_mock):
+    requests_mock.get(URL)
+    os.chmod(tmpdir, stat.S_IRUSR)
+    with pytest.raises(PermissionError) as error:
+        assert download(URL, tmpdir) == error
