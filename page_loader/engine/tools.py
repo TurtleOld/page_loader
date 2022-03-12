@@ -36,6 +36,9 @@ def create_folder(url, path) -> str:
         if not os.path.isdir(full_path):
             try:
                 os.mkdir(full_path)
+            except PermissionError:
+                raise PermissionError(f'Permission denied to the specified directory:'
+                                      f'{path}')
             except OSError:
                 raise OSError(f'Failed to create folder {folder_name}')
 
@@ -48,19 +51,13 @@ def save_to_file(path_to_file, data):
     :param path_to_file: Path to file.
     :param data: File Contents.
     """
-    try:
-        if isinstance(data, bytes):
-            with open(path_to_file, 'wb') as file_name:
-                file_name.write(data)
+    if isinstance(data, bytes):
+        with open(path_to_file, 'wb') as file_name:
+            file_name.write(data)
 
-        else:
-            with open(path_to_file, 'w', encoding='utf-8') as file_name:
-                file_name.write(data)
-
-    except PermissionError:
-        log.error(f'Permission denied to the specified directory '
-                  f'{os.path.dirname(path_to_file)}')
-        raise
+    else:
+        with open(path_to_file, 'w', encoding='utf-8') as file_name:
+            file_name.write(data)
 
 
 def get_html_file_with_content(url, path):

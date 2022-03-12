@@ -17,8 +17,8 @@ URL_CSS = os.path.join(URL, INTERNET_PATH_CSS)
 URL_JS = os.path.join(URL, INTERNET_PATH_JS)
 URL_FILE = os.path.join(URL, INTERNET_PATH_FILE)
 
-PATH_ORIGINAL = os.path.join('fixtures', 'downloads')
-DOWNLOADS_DIR = os.path.join('fixtures', 'downloads', 'changed')
+PATH_ORIGINAL = os.path.join('tests', 'fixtures', 'downloads')
+DOWNLOADS_DIR = os.path.join('tests', 'fixtures', 'downloads', 'changed')
 
 HTML_FILE_NAME = os.path.join(PATH_ORIGINAL, 'page-loader-hexlet-repl-co.html')
 CHANGED_HTML_FILE_NAME = 'page-loader-hexlet-repl-co.html'
