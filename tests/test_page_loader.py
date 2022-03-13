@@ -8,7 +8,7 @@ from requests.exceptions import HTTPError, ConnectionError, \
 from page_loader import download
 
 URL = 'https://page-loader.hexlet.repl.co'
-TEST_FOLDER = os.path.dirname(__name__)
+TEST_FOLDER = os.path.dirname(__file__)
 INTERNET_PATH_IMAGE = '/assets/professions/nodejs.png'
 INTERNET_PATH_CSS = '/assets/application.css'
 INTERNET_PATH_JS = '/script.js'
