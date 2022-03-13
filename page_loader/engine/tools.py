@@ -32,25 +32,20 @@ def create_folder(url, path) -> str:
         domain_name = get_new_link_format(url)
         folder_name = f'{domain_name}_files'
         full_path = os.path.join(path, folder_name)
-        if not os.path.isdir(full_path):
-            try:
-                print(os.mkdir(full_path))
+
+        try:
+            if not os.path.isdir(full_path):
                 os.mkdir(full_path)
-            except PermissionError:
-                log.error(f'Permission denied to the specified directory:'
-                          f'{path}')
-                raise PermissionError(
-                    f'Permission denied to the specified directory:'
-                    f'{path}')
-            except FileExistsError:
-                log.error(f'Cannot create a file when that file already exists:'
-                          f'{folder_name}')
-                raise FileExistsError(
-                    f'Cannot create a file when that file already exists:'
-                    f'{folder_name}')
-            except OSError:
-                log.error(f'Failed to create folder {folder_name}')
-                raise OSError(f'Failed to create folder {folder_name}')
+        except PermissionError:
+            log.error(f'Permission denied to the specified directory:'
+                      f'{path}')
+            raise PermissionError(
+                f'Permission denied to the specified directory:'
+                f'{path}')
+        except OSError:
+            log.error(f'Failed to create folder {folder_name}')
+            raise OSError(f'Failed to create folder {folder_name}')
+
         return folder_name
 
 
@@ -97,6 +92,8 @@ def get_content(url):
         response = requests.get(url, timeout=3)
         response.raise_for_status()
     except requests.exceptions.ConnectTimeout:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Response timeout expired')
         raise requests.exceptions.ConnectionError(
             f'Failed to establish a connection to site: {url}\n'
             f'Response timeout expired'
