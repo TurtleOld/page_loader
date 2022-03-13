@@ -17,7 +17,6 @@ def download(url, path=CURRENT_DIRECTORY):
         log.error(f'No such directory: {path}')
         raise FileNotFoundError(f'No such directory: {path}')
     except PermissionError:
-        print('error')
         log.error(f'Permission denied to the specified directory:'
                   f' {path}')
         raise PermissionError(

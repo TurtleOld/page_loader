@@ -35,6 +35,12 @@ def create_folder(url, path) -> str:
         if not os.path.isdir(full_path):
             try:
                 os.mkdir(full_path)
+            except PermissionError:
+                log.error(f'Permission denied to the specified directory:'
+                          f' {path}')
+                raise PermissionError(
+                    f'Permission denied to the specified directory:'
+                    f' {path}')
             except OSError:
                 log.error(f'Failed to create folder {folder_name}')
                 raise OSError(f'Failed to create folder {folder_name}')
