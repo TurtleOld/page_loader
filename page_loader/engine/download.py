@@ -1,4 +1,3 @@
-import logging
 import os
 
 from page_loader.engine.change_links import change_links
