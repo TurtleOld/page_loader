@@ -2,8 +2,8 @@ import os
 
 from page_loader.engine.change_links import change_links
 from page_loader.engine.download_content import download_content
-from page_loader.engine.tools import get_html_file_with_content
 from page_loader.engine.logging_config import log
+from page_loader.engine.tools import get_html_file_with_content
 
 CURRENT_DIRECTORY = os.getcwd()
 
@@ -16,5 +16,12 @@ def download(url, path=CURRENT_DIRECTORY):
     except FileNotFoundError:
         log.error(f'No such directory: {path}')
         raise FileNotFoundError(f'No such directory: {path}')
+    except PermissionError:
+        print('error')
+        log.error(f'Permission denied to the specified directory:'
+                  f' {path}')
+        raise PermissionError(
+            f'Permission denied to the specified directory:'
+            f' {path}')
     else:
         return file_with_content

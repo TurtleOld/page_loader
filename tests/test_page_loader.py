@@ -103,4 +103,5 @@ def test_denied_to_folder(tmpdir, requests_mock):
     os.chmod(tmpdir, 400)
     with pytest.raises(PermissionError) as error:
         download(URL, tmpdir)
-    assert f'Permission denied to the specified directory: {tmpdir}' == str(error.value)
+    assert f'Permission denied to the specified directory: {tmpdir}' \
+           == str(error.value)
