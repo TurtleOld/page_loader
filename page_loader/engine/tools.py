@@ -37,8 +37,9 @@ def create_folder(url, path) -> str:
             try:
                 os.mkdir(full_path)
             except PermissionError:
-                raise PermissionError(f'Permission denied to the specified directory:'
-                                      f'{path}')
+                raise PermissionError(
+                    f'Permission denied to the specified directory:'
+                    f'{path}')
             except OSError:
                 raise OSError(f'Failed to create folder {folder_name}')
 
@@ -98,7 +99,7 @@ def get_content(url):
             f'Failed to establish a connection to site: {url}\n'
             f'Too many redirects'
         )
-    except requests.exceptions.HTTPError as http_error:
+    except requests.exceptions.HTTPError:
         raise requests.exceptions.HTTPError(
             f'Failed to establish a connection to site: {url}\n'
             f'HTTP Error occurred'
