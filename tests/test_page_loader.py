@@ -27,7 +27,7 @@ CREATED_DIR_NAME = 'page-loader-hexlet-repl-co_files'
 IMAGE_NAME = 'page-loader-hexlet-repl-co-assets-professions-nodejs.png'
 CSS_NAME = 'page-loader-hexlet-repl-co-assets-application.css'
 JS_NAME = 'page-loader-hexlet-repl-co--script.js'
-FILE_NAME = 'page-loader-hexlet-repl-co-courses.html'
+FILE_NAME = 'page-loader-hexlet-repl-co--courses.html'
 
 CREATED_HTML_FILE = os.path.join(DOWNLOADS_DIR, CHANGED_HTML_FILE_NAME)
 CREATED_IMAGE = os.path.join(CREATED_DIR_NAME, IMAGE_NAME).strip()
@@ -108,7 +108,7 @@ def test_connection(connection_error_excepted, expected_value, tmpdir,
     assert str(error.value) == expected_value
 
 
-def test_not_exist_denied_to_folder():
+def test_not_exist_folder():
     with pytest.raises(OSError) as err:
         directory = os.path.join(PATH_ORIGINAL, CREATED_DIR_NAME, 'not_exist')
         download(URL, directory)

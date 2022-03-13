@@ -59,7 +59,7 @@ def change_links(url, path):
                     tag[attribute] = os.path.join(
                         folder_name,
                         f'{domain_name}'
-                        f'{get_new_link_format(root_folder_to_file)}'
+                        f'{get_new_link_format(root_folder_to_file)}-'
                         f'{file_name}.html')
 
     content_soup = get_soup(url)
@@ -67,4 +67,4 @@ def change_links(url, path):
     for tag_name, attr in TAGS_ATTRIBUTES.items():
         get_link_to_file(tag_name, attr)
 
-    save_to_file(path_to_file, content_soup.prettify(formatter='html5'))
+    save_to_file(path_to_file, content_soup.prettify(formatter='minimal'))
