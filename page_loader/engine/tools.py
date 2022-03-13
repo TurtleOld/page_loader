@@ -42,8 +42,7 @@ def create_folder(url, path) -> str:
                     f'{path}')
             except OSError:
                 raise OSError(f'Failed to create folder {folder_name}')
-            else:
-                return folder_name
+        return folder_name
 
 
 def save_to_file(path_to_file, data):
