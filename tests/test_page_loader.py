@@ -1,5 +1,4 @@
 import os
-import stat
 
 import pytest
 from requests.exceptions import HTTPError, ConnectionError, \
@@ -69,22 +68,6 @@ def test_download_content(new_file, expect_file, tmpdir, requests_mock):
     assert os.path.exists(expected_path)
 
 
-#
-# @pytest.mark.parametrize('new_file, expect_file', [
-#     (CHANGED_HTML_FILE_NAME, CREATED_HTML_FILE),
-#     (CREATED_IMAGE, EXPECTED_IMAGE),
-# ])
-# def test_link_is_download(new_file, expect_file, tmpdir, requests_mock):
-#     requests_mock.get(URL, content=read_file(HTML_FILE_NAME))
-#     requests_mock.get(URL_IMAGE, content=read_file(EXPECTED_IMAGE))
-#     requests_mock.get(URL_CSS, content=read_file(EXPECTED_CSS))
-#     requests_mock.get(URL_JS, content=read_file(EXPECTED_JS))
-#     requests_mock.get(URL_FILE, content=read_file(EXPECTED_FILE))
-#     download(URL, tmpdir)
-#     new_file = os.path.join(tmpdir, new_file)
-#     assert read_file(new_file) == read_file(expect_file)
-
-
 expected = [
     (ConnectTimeout, f'Failed to establish a connection to site: {URL}\n'
                      f'Response timeout expired'),
@@ -117,6 +100,7 @@ def test_not_exist_folder():
 
 def test_denied_to_folder(tmpdir, requests_mock):
     requests_mock.get(URL)
-    os.chmod(tmpdir, stat.S_IRUSR)
+    os.chmod(tmpdir, 400)
     with pytest.raises(PermissionError) as error:
-        assert download(URL, tmpdir) == error
+        download(URL, tmpdir)
+    assert f'Permission denied to the specified directory: {tmpdir}' == str(error.value)

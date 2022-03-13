@@ -1,16 +1,9 @@
 # ! /usr/bin/env python
 
-import logging.config
 import sys
 
 from page_loader import download
 from page_loader.engine.parse_cli_args import parse_cli_arguments
-
-log = logging.getLogger(__name__)
-
-LOG_FORMAT = '%(message)s'
-
-logging.basicConfig(stream=sys.stderr, level=logging.INFO, format=LOG_FORMAT)
 
 
 def main():

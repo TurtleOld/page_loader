@@ -1,4 +1,3 @@
-import logging
 import os
 import re
 from pathlib import Path
@@ -13,8 +12,6 @@ from page_loader.engine.tools import get_content
 from page_loader.engine.tools import get_new_link_format
 from page_loader.engine.tools import get_soup
 from page_loader.engine.tools import save_to_file
-
-log = logging.getLogger(__name__)
 
 
 def download_content(url, path):
