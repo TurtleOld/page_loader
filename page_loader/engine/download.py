@@ -17,6 +17,6 @@ def download(url, path=CURRENT_DIRECTORY):
         change_links(url, path)
     except FileNotFoundError:
         log.error(f'No such directory: {path}')
-        raise
+        raise FileNotFoundError(f'No such directory: {path}')
     else:
         return file_with_content

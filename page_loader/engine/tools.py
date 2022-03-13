@@ -32,15 +32,24 @@ def create_folder(url, path) -> str:
         domain_name = get_new_link_format(url)
         folder_name = f'{domain_name}_files'
         full_path = os.path.join(path, folder_name)
-
         if not os.path.isdir(full_path):
             try:
+                print(os.mkdir(full_path))
                 os.mkdir(full_path)
             except PermissionError:
+                log.error(f'Permission denied to the specified directory:'
+                          f'{path}')
                 raise PermissionError(
                     f'Permission denied to the specified directory:'
                     f'{path}')
+            except FileExistsError:
+                log.error(f'Cannot create a file when that file already exists:'
+                          f'{folder_name}')
+                raise FileExistsError(
+                    f'Cannot create a file when that file already exists:'
+                    f'{folder_name}')
             except OSError:
+                log.error(f'Failed to create folder {folder_name}')
                 raise OSError(f'Failed to create folder {folder_name}')
         return folder_name
 
@@ -51,7 +60,6 @@ def save_to_file(path_to_file, data):
     :param path_to_file: Path to file.
     :param data: File Contents.
     """
-    print(path_to_file)
     if isinstance(data, bytes):
         with open(path_to_file, 'wb') as file_name:
             file_name.write(data)
@@ -95,21 +103,29 @@ def get_content(url):
         )
 
     except requests.exceptions.TooManyRedirects:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Too many redirects')
         raise requests.exceptions.TooManyRedirects(
             f'Failed to establish a connection to site: {url}\n'
             f'Too many redirects'
         )
     except requests.exceptions.HTTPError:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'HTTP Error occurred')
         raise requests.exceptions.HTTPError(
             f'Failed to establish a connection to site: {url}\n'
             f'HTTP Error occurred'
         )
     except requests.exceptions.ConnectionError:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Please check your a connection to Ethernet')
         raise requests.exceptions.ConnectionError(
             f'Failed to establish a connection to site: {url}\n'
             f'Please check your a connection to Ethernet'
         )
     except requests.exceptions.RequestException:
+        log.error(f'Failed to establish a connection to site: {url}\n'
+                  f'Other request exceptions occurred')
         raise requests.exceptions.RequestException(
             f'Failed to establish a connection to site: {url}\n'
             f'Other request exceptions occurred'
