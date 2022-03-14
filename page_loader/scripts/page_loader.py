@@ -10,8 +10,6 @@ def main():
     try:
         args = parse_cli_arguments()
         file_path = download(args.url, args.output)
-        if file_path is None:
-            return
         print(f"Page was successfully downloaded into '{file_path}'")
         sys.exit(0)
     except Exception as error:

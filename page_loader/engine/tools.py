@@ -27,25 +27,24 @@ def create_folder(url, path) -> str:
     :param path: The path to save the content.
     :return: Name of the created folder.
     """
-    if requests.get(url).status_code == 200:
-        domain_name = get_new_link_format(url)
-        folder_name = f'{domain_name}_files'
-        full_path = os.path.join(path, folder_name)
+    domain_name = get_new_link_format(url)
+    folder_name = f'{domain_name}_files'
+    full_path = os.path.join(path, folder_name)
 
-        if not os.path.isdir(full_path):
-            try:
-                os.mkdir(full_path)
-            except PermissionError:
-                log.error(f'Permission denied to the specified directory:'
-                          f' {path}')
-                raise PermissionError(
-                    f'Permission denied to the specified directory:'
-                    f' {path}')
-            except OSError:
-                log.error(f'Failed to create folder {folder_name}')
-                raise OSError(f'Failed to create folder {folder_name}')
+    if not os.path.isdir(full_path):
+        try:
+            os.mkdir(full_path)
+        except PermissionError:
+            log.error(f'Permission denied to the specified directory:'
+                      f' {path}')
+            raise PermissionError(
+                f'Permission denied to the specified directory:'
+                f' {path}')
+        except OSError:
+            log.error(f'Failed to create folder {folder_name}')
+            raise OSError(f'Failed to create folder {folder_name}')
 
-        return folder_name
+    return folder_name
 
 
 def save_to_file(path_to_file, data):
@@ -76,7 +75,7 @@ def get_html_file_with_content(url, path):
         new_link = get_new_link_format(url)
         file_name = f'{new_link}.html'
         path_to_file = os.path.join(path, file_name)
-        save_to_file(path_to_file, file_content)
+        # save_to_file(path_to_file, file_content)
 
         return path_to_file
 
