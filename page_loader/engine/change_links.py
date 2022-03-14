@@ -20,7 +20,6 @@ def change_links(url, path):
     path_to_file = get_html_file_with_content(url, path)
     link_preparation = urlparse(url)
     domain_name = get_new_link_format(link_preparation.netloc)
-    urls = f'{link_preparation.scheme}://{link_preparation.netloc}'
     folder_name = create_folder(url, path)
 
     def get_link_to_file(search_tag, attribute):
@@ -30,7 +29,7 @@ def change_links(url, path):
         for tag in tags:
             file_name = f'{os.path.basename(tag[attribute])}'
             root_folder_to_file = os.path.dirname(tag[attribute])
-            extension = Path(f'{urls}{tag[attribute]}').suffix
+            extension = Path(f'{url}{tag[attribute]}').suffix
             match_by_extension = re.search(r'.\D{2,4}$', extension)
 
             if not tag[attribute].startswith('http'):
