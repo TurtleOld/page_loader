@@ -44,12 +44,12 @@ def change_links(url, path):
                 else:
                     print(folder_name,
                           f'{domain_name}'
-                          f'{get_new_link_format(root_folder_to_file)}'
+                          f'{get_new_link_format(root_folder_to_file)}-'
                           f'{file_name}.html')
                     tag[attribute] = os.path.join(
                         folder_name,
                         f'{domain_name}'
-                        f'{get_new_link_format(root_folder_to_file)}'
+                        f'{get_new_link_format(root_folder_to_file)}-'
                         f'{file_name}.html')
 
             if tag[attribute].startswith('http') \
