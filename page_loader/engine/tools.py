@@ -75,7 +75,7 @@ def get_html_file_with_content(url, path):
         new_link = get_new_link_format(url)
         file_name = f'{new_link}.html'
         path_to_file = os.path.join(path, file_name)
-        # save_to_file(path_to_file, file_content)
+        save_to_file(path_to_file, file_content)
 
         return path_to_file
 
