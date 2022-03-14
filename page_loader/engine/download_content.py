@@ -47,7 +47,7 @@ def download_content(url, path):
                 else:
                     save_to_file(os.path.join(
                         path, folder_name,
-                        f'{domain_name}-'
+                        f'{domain_name}'
                         f'{get_new_link_format(tag[attribute])}.html'
                     ),
                         get_content(f'{urls}{tag[attribute]}'))
