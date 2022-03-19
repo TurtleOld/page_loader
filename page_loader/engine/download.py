@@ -37,8 +37,9 @@ def download(url, path):
             resource_folder_name = os.path.basename(folder_for_download)
             resource_path_to_file = os.path.join(resource_folder_name,
                                                  resource_file_name)
-            change_links(soup_data, search_tag, attribute, link,
-                         resource_path_to_file)
+            change_links(soup_data=soup_data, search_tag=search_tag,
+                         attribute=attribute, old_link=link,
+                         new_link=resource_path_to_file)
             bar.next()
             sleep(1)
 

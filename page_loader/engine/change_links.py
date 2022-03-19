@@ -47,9 +47,9 @@ def get_links_for_download(url, soup_data):
     return set(list_links_for_download)
 
 
-def change_links(soup_data, search_tag, attribute, old_link, new_link):
-    tags = soup_data.find_all(search_tag)
+def change_links(soup_data, **kwargs):
+    tags = soup_data.find_all(kwargs['search_tag'])
 
     for tag in tags:
-        if tag[attribute] == old_link:
-            tag[attribute] = new_link
+        if tag[kwargs['attribute']] == kwargs['old_link']:
+            tag[kwargs['attribute']] = kwargs['new_link']
