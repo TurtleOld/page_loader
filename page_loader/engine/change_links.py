@@ -18,7 +18,7 @@ def is_same_domain(link, url):
         return True
     if f'.{link_netloc}' == url_netloc:
         return True
-    if not url_netloc:
+    if not link_netloc:
         return True
     return False
 
