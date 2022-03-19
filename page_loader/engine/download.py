@@ -1,26 +1,52 @@
 import os
+from time import sleep
+from urllib.parse import urljoin
 
-from page_loader.engine.change_links import change_links
+from bs4 import BeautifulSoup
+from progress.bar import PixelBar
+
+from page_loader.engine.change_links import change_links, get_links_for_download
 from page_loader.engine.download_content import download_content
-from page_loader.engine.logging_config import log
-from page_loader.engine.tools import get_html_file_with_content
+from page_loader.engine.logger_config import logger, logger_error
+from page_loader.engine.response import get_content
+from page_loader.engine.save_file import save_to_file
+from page_loader.engine.url_parse import get_new_name_link, get_name_folder
 
-CURRENT_DIRECTORY = os.getcwd()
 
-
-def download(url, path=CURRENT_DIRECTORY):
-    try:
-        file_with_content = get_html_file_with_content(url, path)
-        download_content(url, path)
-        change_links(url, path)
-    except FileNotFoundError:
-        log.error(f'No such directory: {path}')
-        raise FileNotFoundError(f'No such directory: {path}')
-    except PermissionError:
-        log.error(f'Permission denied to the specified directory:'
-                  f' {path}')
-        raise PermissionError(
-            f'Permission denied to the specified directory:'
-            f' {path}')
+def download(url, path):
+    content = get_content(url)
+    soup_data = BeautifulSoup(content, 'html.parser')
+    main_file_name = os.path.join(path, get_new_name_link(url) + '.html')
+    folder_name = get_name_folder(url)
+    folder_for_download = os.path.join(path, folder_name)
+    if not os.path.isdir(folder_for_download):
+        os.mkdir(folder_for_download)
+        logger.info(f'Folder {folder_for_download} created')
     else:
-        return file_with_content
+        logger.info(f'Folder {folder_for_download} exists')
+
+    links_for_download = get_links_for_download(url, soup_data)
+    bar = PixelBar(max=len(links_for_download),
+                   suffix='%(percent)d%% \n')
+    for link, search_tag, attribute in links_for_download:
+        try:
+
+            new_link = urljoin(url, link)
+            resource_file_name = download_content(new_link,
+                                                  folder_for_download)
+            resource_folder_name = os.path.basename(folder_for_download)
+            resource_path_to_file = os.path.join(resource_folder_name,
+                                                 resource_file_name)
+            change_links(soup_data, search_tag, attribute, link,
+                         resource_path_to_file)
+            bar.next()
+            sleep(1)
+
+        except Exception as error:
+            logger_error.error(error)
+            print(f'Link {link} not downloaded: {error}')
+    bar.finish()
+    soup_data = soup_data.prettify()
+    save_to_file(main_file_name, soup_data)
+
+    return main_file_name

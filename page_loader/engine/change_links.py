@@ -1,69 +1,49 @@
-import os
-import re
-from pathlib import Path
 from urllib.parse import urlparse
 
-from page_loader.engine.dicts import TAGS_ATTRIBUTES
-from page_loader.engine.tools import create_folder
-from page_loader.engine.tools import get_html_file_with_content
-from page_loader.engine.tools import get_new_link_format
-from page_loader.engine.tools import get_soup
-from page_loader.engine.tools import save_to_file
+from page_loader.engine.logger_config import logger_error, logger
+
+TAGS_ATTRIBUTES = {
+    'img': 'src',
+    'script': 'src',
+    'link': 'href',
+}
 
 
-def change_links(url, path):
-    """
-    Function for changing links and writing them to a file
-    :param url: Link to the website.
-    :param path: The path to save the content.
-    """
-    path_to_file = get_html_file_with_content(url, path)
-    link_preparation = urlparse(url)
-    domain_name = get_new_link_format(link_preparation.netloc)
-    folder_name = create_folder(url, path)
+def is_same_domain(link, url):
+    if urlparse(url).netloc == urlparse(link).netloc:
+        return True
+    return False
+
+
+def get_links_for_download(url, soup_data):
+    domain_name = urlparse(url).netloc
 
     def get_link_to_file(search_tag, attribute):
 
-        tags = content_soup.find_all(search_tag)
+        tags = soup_data.find_all(search_tag)
 
         for tag in tags:
-            file_name = f'{os.path.basename(tag[attribute])}'
-            root_folder_to_file = os.path.dirname(tag[attribute])
-            extension = Path(f'{url}{tag[attribute]}').suffix
-            match_by_extension = re.search(r'.\D{2,4}$', extension)
+            try:
+                link = tag[attribute]
+                if is_same_domain(link, domain_name):
+                    list_links_for_download.append((link, search_tag,
+                                                    attribute))
+            except KeyError:
+                logger_error.error('The link is not downloaded because page '
+                                   'loader '
+                                   'does not support empty attributes')
 
-            if not tag[attribute].startswith('http'):
+    list_links_for_download = []
 
-                if match_by_extension:
-                    tag[attribute] = os.path.join(
-                        folder_name,
-                        f'{domain_name}'
-                        f'{get_new_link_format(root_folder_to_file)}-'
-                        f'{file_name}')
-                else:
-                    tag[attribute] = os.path.join(
-                        folder_name,
-                        f'{domain_name}'
-                        f'{get_new_link_format(root_folder_to_file)}-'
-                        f'{file_name}.html')
+    for tag, attr in TAGS_ATTRIBUTES.items():
+        get_link_to_file(tag, attr)
+    return set(list_links_for_download)
 
-            if tag[attribute].startswith('http') \
-                    and urlparse(url).netloc == urlparse(tag[attribute]).netloc:
-                if match_by_extension:
-                    tag[attribute] = os.path.join(
-                        folder_name,
-                        f'{get_new_link_format(root_folder_to_file)}-'
-                        f'{file_name}')
-                else:
-                    tag[attribute] = os.path.join(
-                        folder_name,
-                        f'{domain_name}'
-                        f'{get_new_link_format(root_folder_to_file)}-'
-                        f'{file_name}.html')
 
-    content_soup = get_soup(url)
+def change_links(soup_data, search_tag, attribute, old_link, new_link):
+    tags = soup_data.find_all(search_tag)
 
-    for tag_name, attr in TAGS_ATTRIBUTES.items():
-        get_link_to_file(tag_name, attr)
-
-    save_to_file(path_to_file, content_soup.prettify(formatter='minimal'))
+    for tag in tags:
+        if tag[attribute] == old_link:
+            logger.info(f'Link {tag[attribute]} changed on {new_link}')
+            tag[attribute] = new_link
