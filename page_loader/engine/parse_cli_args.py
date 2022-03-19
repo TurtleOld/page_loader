@@ -11,7 +11,9 @@ VERSION_NUMBER = f'{DESCRIPTION} 1.0'
 
 
 def parse_cli_arguments():
-    parser = argparse.ArgumentParser(description=DESCRIPTION)
+    parser = argparse.ArgumentParser(description=DESCRIPTION,
+                                     prog='page-loader',
+                                     usage='%(prog)s [options] <url>')
     parser.add_argument(OUTPUT_FLAG_1, OUTPUT_FLAG_2,
                         help=OUTPUT_HELP,
                         default=os.getcwd())
