@@ -1,6 +1,6 @@
 from urllib.parse import urlparse
 
-from page_loader.engine.logger_config import logger_error, logger
+from page_loader.engine.logger_config import logger_error
 
 TAGS_ATTRIBUTES = {
     'img': 'src',
@@ -45,5 +45,4 @@ def change_links(soup_data, search_tag, attribute, old_link, new_link):
 
     for tag in tags:
         if tag[attribute] == old_link:
-            logger.info(f'Link {tag[attribute]} changed on {new_link}')
             tag[attribute] = new_link

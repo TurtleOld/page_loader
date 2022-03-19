@@ -22,7 +22,7 @@ def main():
         sys.exit(1)
     except KeyError:
         sys.exit(1)
-    except Exception as errr:
+    except Exception:
         sys.exit(1)
 
 

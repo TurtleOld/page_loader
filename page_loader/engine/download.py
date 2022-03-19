@@ -21,17 +21,18 @@ def download(url, path):
     folder_for_download = os.path.join(path, folder_name)
     if not os.path.isdir(folder_for_download):
         os.mkdir(folder_for_download)
-        logger.info(f'Folder {folder_for_download} created')
+        logger.info(f'Folder {folder_for_download} created\n')
     else:
-        logger.info(f'Folder {folder_for_download} exists')
+        logger.info(f'Folder {folder_for_download} exists\n')
 
     links_for_download = get_links_for_download(url, soup_data)
     bar = PixelBar(max=len(links_for_download),
-                   suffix='%(percent)d%% \n')
+                   suffix='%(percent)d%%\n\n')
     for link, search_tag, attribute in links_for_download:
         try:
 
             new_link = urljoin(url, link)
+            print(new_link)
             resource_file_name = download_content(new_link,
                                                   folder_for_download)
             resource_folder_name = os.path.basename(folder_for_download)
