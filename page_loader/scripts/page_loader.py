@@ -14,8 +14,7 @@ def main():
         print(f"Page was successfully downloaded into '{file_path}'")
         sys.exit(0)
     except PermissionError as error:
-        logger_error.error(f'Permission denied to the specified directory: '
-                           f'{error.filename}')
+        logger_error.error(f'Permission denied to the specified directory: {error.filename}')
         sys.exit(1)
     except FileNotFoundError as error2:
         logger_error.error(f'The system cannot find the path specified: '
