@@ -40,5 +40,3 @@ def get_name_folder(url) -> str:
     folder_name = f'{domain_name}_files'
 
     return folder_name
-
-
