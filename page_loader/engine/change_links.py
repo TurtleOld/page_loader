@@ -13,7 +13,7 @@ def is_same_domain(link, url):
     if not link:
         return False
     link_netloc = urlparse(link).netloc
-    url_netloc = url.netloc
+    url_netloc =  urlparse(url).netloc
     if link_netloc == url_netloc:
         return True
     if f'.{link_netloc}' == url_netloc:
@@ -24,7 +24,6 @@ def is_same_domain(link, url):
 
 
 def get_links_for_download(url, soup_data):
-    domain_name = urlparse(url)
 
     def get_link_to_file(search_tag, attribute):
 
@@ -33,7 +32,7 @@ def get_links_for_download(url, soup_data):
         for tag in tags:
             try:
                 link = tag[attribute]
-                if is_same_domain(link, domain_name):
+                if is_same_domain(link, url):
                     list_links_for_download.append((link, search_tag,
                                                     attribute))
             except KeyError:
