@@ -32,7 +32,6 @@ def download(url, path):
         try:
 
             new_link = urljoin(url, link)
-            print(new_link)
             resource_file_name = download_content(new_link,
                                                   folder_for_download)
             resource_folder_name = os.path.basename(folder_for_download)
