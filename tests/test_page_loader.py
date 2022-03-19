@@ -25,8 +25,8 @@ CHANGED_HTML_FILE_NAME = 'page-loader-hexlet-repl-co.html'
 CREATED_DIR_NAME = 'page-loader-hexlet-repl-co_files'
 IMAGE_NAME = 'page-loader-hexlet-repl-co-assets-professions-nodejs.png'
 CSS_NAME = 'page-loader-hexlet-repl-co-assets-application.css'
-JS_NAME = 'page-loader-hexlet-repl-co--script.js'
-FILE_NAME = 'page-loader-hexlet-repl-co--courses.html'
+JS_NAME = 'page-loader-hexlet-repl-co-script.js'
+FILE_NAME = 'page-loader-hexlet-repl-co-courses.html'
 
 CREATED_HTML_FILE = os.path.join(DOWNLOADS_DIR, CHANGED_HTML_FILE_NAME)
 CREATED_IMAGE = os.path.join(CREATED_DIR_NAME, IMAGE_NAME).strip()
@@ -74,7 +74,8 @@ expected = [
     (HTTPError, f'Failed to establish a connection to site: {URL}\n'
                 f'HTTP Error occurred'),
     (ConnectionError, f'Failed to establish a connection to site: {URL}\n'
-                      f'Please check your a connection to Ethernet'),
+                      f'Please check your a connection to Ethernet '
+                      f'or address site'),
     (TooManyRedirects, f'Failed to establish a connection to site: {URL}\n'
                        f'Too many redirects'),
     (RequestException, f'Failed to establish a connection to site: {URL}\n'
