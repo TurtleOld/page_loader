@@ -22,10 +22,10 @@ ch_error.setLevel(logging.ERROR)
 # create formatter
 formatter = logging.Formatter(datefmt=DATE_FORMAT, fmt=LOG_FORMAT)
 
-# add formatter to ch
+# add formatter to ch and ch_error
 ch.setFormatter(formatter)
 ch_error.setFormatter(formatter)
 
-# add ch to logger
+# add ch to logger and logger_error
 logger.addHandler(ch)
 logger_error.addHandler(ch_error)
