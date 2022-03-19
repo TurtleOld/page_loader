@@ -14,13 +14,12 @@ def is_same_domain(link, url):
         return False
     link_netloc = urlparse(link).netloc
     url_netloc = urlparse(link).netloc
-    print(f'.{link_netloc}')
     if urlparse(url).netloc == urlparse(link).netloc:
         return True
-    # if f'.{link_netloc}' == url_netloc:
-    #     return True
-    # if not url_netloc:
-    #     return True
+    if f'.{link_netloc}' == url_netloc:
+        return True
+    if not url_netloc:
+        return True
     return False
 
 
