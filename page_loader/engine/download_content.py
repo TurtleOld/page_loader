@@ -2,7 +2,7 @@ import os
 
 from page_loader.engine.response import get_content
 from page_loader.engine.save_file import save_to_file
-from page_loader.engine.url_parse import get_file_name
+from page_loader.engine.url import get_file_name
 
 
 def download_content(url, path):

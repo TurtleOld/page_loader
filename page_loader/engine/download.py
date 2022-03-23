@@ -10,7 +10,7 @@ from page_loader.engine.download_content import download_content
 from page_loader.engine.logger_config import logger, logger_error
 from page_loader.engine.response import get_content
 from page_loader.engine.save_file import save_to_file
-from page_loader.engine.url_parse import get_new_name_link, get_name_folder
+from page_loader.engine.url import get_new_name_link, get_name_folder
 
 
 def download(url, path):
