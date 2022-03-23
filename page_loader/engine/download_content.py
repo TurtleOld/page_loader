@@ -1,7 +1,6 @@
 import os
 
-from page_loader.engine.response import get_content
-from page_loader.engine.save_file import save_to_file
+from page_loader.engine.services import get_content, save_to_file
 from page_loader.engine.url import get_file_name
 
 

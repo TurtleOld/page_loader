@@ -3,13 +3,13 @@ from time import sleep
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
+from page_loader.engine.save_file import save_to_file
 from progress.bar import PixelBar
 
 from page_loader.engine.change_links import change_links, get_links_for_download
 from page_loader.engine.download_content import download_content
 from page_loader.engine.logger_config import logger, logger_error
-from page_loader.engine.response import get_content
-from page_loader.engine.save_file import save_to_file
+from page_loader.engine.services import get_content
 from page_loader.engine.url import get_new_name_link, get_name_folder
 
 
