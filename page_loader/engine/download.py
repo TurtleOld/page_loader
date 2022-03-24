@@ -24,7 +24,7 @@ def download(url, path):
     else:
         logger.info(f'Folder {folder_for_download} exists\n')
 
-    links_for_download = get_links_for_download(url, soup_data)
+    links_for_download = get_links_for_download(soup_data)
     bar = PixelBar(max=len(links_for_download),
                    suffix='%(percent)d%%\n\n')
     for link, search_tag, attribute in links_for_download:
@@ -32,6 +32,7 @@ def download(url, path):
             new_link = urljoin(url, link)
             resource_file_name = download_content(new_link,
                                                   folder_for_download)
+            print(resource_file_name)
             resource_folder_name = os.path.basename(folder_for_download)
             resource_path_to_file = os.path.join(resource_folder_name,
                                                  resource_file_name)
@@ -43,8 +44,8 @@ def download(url, path):
             print(f'Link {link} not downloaded: {error}')
           
     bar.finish()
+
     soup_data = soup_data.prettify()
-    print(soup_data)
     save_to_file(main_file_name, soup_data)
 
     return main_file_name
