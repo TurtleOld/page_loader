@@ -1,32 +1,28 @@
-[tool.poetry]
-name = "hexlet-code"
-version = "0.6.0"
-description = "Page loader by Alexander Pavlov"
-authors = ["TurtleOld <shurpo.alexander@gmail.com>"]
-classifiers = [
-    "Topic :: Software Development :: Page Loader",
-]
-repository = "https://github.com/TurtleOld/python-project-lvl3"
-packages = [
-    { include = 'page_loader' },
-]
+[build-system]
+build-backend = "poetry.core.masonry.api"
+requires = ["poetry-core>=1.0.0"]
 
+[tool]
+[tool.poetry]
+authors = ["TurtleOld <shurpo.alexander@gmail.com>"]
+classifiers = ["Topic :: Software Development :: Page Loader"]
+description = "Page loader by Alexander Pavlov"
+name = "hexlet-code"
+repository = "https://github.com/TurtleOld/python-project-lvl3"
+version = "0.6.0"
 [tool.poetry.dependencies]
-python = "^3.9"
-requests = "^2.27.1"
 beautifulsoup4 = "^4.10.0"
 progress = "^1.6"
-
+python = "^3.8"
+requests = "^2.27.1"
 [tool.poetry.dev-dependencies]
+click = "^8.0.4"
 flake8 = "^4.0.1"
 pytest = "^6.2.5"
 pytest-cov = "^3.0.0"
 requests-mock = "^1.9.3"
-click = "^8.0.4"
 
+[[tool.poetry.packages]]
+include = "page_loader"
 [tool.poetry.scripts]
 page-loader = "page_loader.scripts.page_loader:main"
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
