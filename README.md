@@ -26,8 +26,8 @@
 
 ### How to use the package - page-loader -h
 
-    usage: page-loader [-h] [-o OUTPUT] [-v] url
-    
+    usage: page-loader [options] <url>
+
     Internet page loader
     
     positional arguments:
