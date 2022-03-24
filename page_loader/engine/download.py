@@ -2,20 +2,19 @@ import os
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
-from page_loader.engine.services import save_to_file
 from progress.bar import PixelBar
 
 from page_loader.engine.change_links import change_links, get_links_for_download
 from page_loader.engine.download_content import download_content
 from page_loader.engine.logger_config import logger, logger_error
 from page_loader.engine.services import get_content
+from page_loader.engine.services import save_to_file
 from page_loader.engine.url import get_new_name_link, get_name_folder
 
 
 def download(url, path):
     content = get_content(url)
     soup_data = BeautifulSoup(content, 'html.parser')
-    print(soup_data)
     main_file_name = os.path.join(path, get_new_name_link(url) + '.html')
     folder_name = get_name_folder(url)
     folder_for_download = os.path.join(path, folder_name)
@@ -30,16 +29,13 @@ def download(url, path):
                    suffix='%(percent)d%%\n\n')
     for link, search_tag, attribute in links_for_download:
         try:
-            
             new_link = urljoin(url, link)
             resource_file_name = download_content(new_link,
                                                   folder_for_download)
             resource_folder_name = os.path.basename(folder_for_download)
             resource_path_to_file = os.path.join(resource_folder_name,
                                                  resource_file_name)
-            change_links(soup_data, search_tag,
-                         attribute, resource_path_to_file)
-            print(search_tag)
+            change_links(soup_data, attribute, resource_path_to_file)
             bar.next()
 
         except Exception as error:

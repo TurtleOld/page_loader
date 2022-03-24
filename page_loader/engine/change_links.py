@@ -1,7 +1,5 @@
 from urllib.parse import urlparse
 
-from page_loader.engine.logger_config import logger_error
-
 TAGS_ATTRIBUTES = {
     'img': 'src',
     'script': 'src',
@@ -21,7 +19,6 @@ def is_same_domain(link, url):
 
 
 def get_links_for_download(url, soup_data):
-
     # def get_link_to_file(search_tag, attribute):
 
     #     tags = soup_data.find_all(search_tag)
@@ -37,13 +34,11 @@ def get_links_for_download(url, soup_data):
     #                                'loader '
     #                                'does not support empty attributes')
 
-  
     list_links_for_download = []
     for tag, attribute in TAGS_ATTRIBUTES.items():
         for tag_soup in soup_data.find_all(tag):
             link = tag_soup[attribute]
             list_links_for_download.append((link, tag_soup, attribute))
-            
 
     return set(list_links_for_download)
     # list_links_for_download = []
@@ -53,9 +48,7 @@ def get_links_for_download(url, soup_data):
     # return set(list_links_for_download)
 
 
-def change_links(soup_data, search_tag,
-                         attribute, resource_path_to_file):
-    tags = soup_data.find_all(search_tag)
-    print(tags)
+def change_links(soup_data, attribute, resource_path_to_file):
+    tags = soup_data.find_all(TAGS_ATTRIBUTES.keys())
     for tag in tags:
         tag[attribute] = resource_path_to_file
