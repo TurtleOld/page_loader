@@ -1,5 +1,7 @@
 from urllib.parse import urlparse
 
+from page_loader.engine.logger_config import logger_error
+
 TAGS_ATTRIBUTES = {
     'img': 'src',
     'script': 'src',
@@ -18,18 +20,37 @@ def is_same_domain(link, url):
     return False
 
 
-def get_links_for_download(soup_data):
+def get_links_for_download(url, soup_data):
+    # def get_link_to_file(search_tag, attribute):
+
+    #     tags = soup_data.find_all(search_tag)
+
+    #     for tag in tags:
+    #         try:
+    #             link = tag[attribute]
+    #             if is_same_domain(link, url):
+    #                 list_links_for_download.append((link, search_tag,
+    #                                                 attribute))
+    #         except KeyError:
+    #             logger_error.error('The link is not downloaded because page '
+    #                                'loader '
+    #                                'does not support empty attributes')
 
     list_links_for_download = []
 
     for tag, attribute in TAGS_ATTRIBUTES.items():
         for tag_soup in soup_data.find_all(tag):
-            link = tag_soup[attribute]
-            list_links_for_download.append((link, tag_soup, attribute))
+            try:
+                link = tag_soup[attribute]
+                if is_same_domain(link, url):
+                    list_links_for_download.append((link, tag_soup, attribute))
+            except KeyError:
+                logger_error.error('The link is not downloaded because page '
+                                   'loader '
+                                   'does not support empty attributes')
 
     return set(list_links_for_download)
 
 
 def change_links(search_tag, attribute, resource_path_to_file):
-    print(resource_path_to_file)
     search_tag[attribute] = resource_path_to_file

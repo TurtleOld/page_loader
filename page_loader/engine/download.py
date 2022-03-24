@@ -24,7 +24,7 @@ def download(url, path):
     else:
         logger.info(f'Folder {folder_for_download} exists\n')
 
-    links_for_download = get_links_for_download(soup_data)
+    links_for_download = get_links_for_download(url, soup_data)
 
     bar = PixelBar(max=len(links_for_download),
                    suffix='%(percent)d%%\n\n')
