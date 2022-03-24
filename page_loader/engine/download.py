@@ -25,9 +25,10 @@ def download(url, path):
         logger.info(f'Folder {folder_for_download} exists\n')
 
     links_for_download = get_links_for_download(soup_data)
-    print(links_for_download)
+
     bar = PixelBar(max=len(links_for_download),
                    suffix='%(percent)d%%\n\n')
+
     for link, search_tag, attribute in links_for_download:
         try:
             new_link = urljoin(url, link)

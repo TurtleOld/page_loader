@@ -31,4 +31,5 @@ def get_links_for_download(soup_data):
 
 
 def change_links(search_tag, attribute, resource_path_to_file):
+    print(resource_path_to_file)
     search_tag[attribute] = resource_path_to_file
