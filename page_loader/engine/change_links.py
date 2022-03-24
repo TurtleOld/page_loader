@@ -48,7 +48,5 @@ def get_links_for_download(url, soup_data):
     # return set(list_links_for_download)
 
 
-def change_links(soup_data, attribute, resource_path_to_file):
-    tags = soup_data.find_all(TAGS_ATTRIBUTES.keys())
-    for tag in tags:
-        tag[attribute] = resource_path_to_file
+def change_links(search_tag, attribute, resource_path_to_file):
+    search_tag[attribute] = resource_path_to_file

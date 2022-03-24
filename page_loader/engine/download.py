@@ -35,7 +35,7 @@ def download(url, path):
             resource_folder_name = os.path.basename(folder_for_download)
             resource_path_to_file = os.path.join(resource_folder_name,
                                                  resource_file_name)
-            change_links(soup_data, attribute, resource_path_to_file)
+            change_links(search_tag, attribute, resource_path_to_file)
             bar.next()
 
         except Exception as error:
@@ -44,6 +44,7 @@ def download(url, path):
           
     bar.finish()
     soup_data = soup_data.prettify()
+    print(soup_data)
     save_to_file(main_file_name, soup_data)
 
     return main_file_name
