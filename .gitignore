@@ -1,0 +1,7 @@
+.github
+.venv
+.idea
+.coverage
+coverage.xml
+dist
+.pytest_cache
