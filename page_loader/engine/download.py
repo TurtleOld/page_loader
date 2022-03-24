@@ -1,5 +1,4 @@
 import os
-from time import sleep
 from urllib.parse import urljoin
 
 from bs4 import BeautifulSoup
@@ -16,6 +15,7 @@ from page_loader.engine.url import get_new_name_link, get_name_folder
 def download(url, path):
     content = get_content(url)
     soup_data = BeautifulSoup(content, 'html.parser')
+    print(soup_data)
     main_file_name = os.path.join(path, get_new_name_link(url) + '.html')
     folder_name = get_name_folder(url)
     folder_for_download = os.path.join(path, folder_name)
@@ -30,22 +30,22 @@ def download(url, path):
                    suffix='%(percent)d%%\n\n')
     for link, search_tag, attribute in links_for_download:
         try:
-
+            
             new_link = urljoin(url, link)
             resource_file_name = download_content(new_link,
                                                   folder_for_download)
             resource_folder_name = os.path.basename(folder_for_download)
             resource_path_to_file = os.path.join(resource_folder_name,
                                                  resource_file_name)
-            change_links(soup_data=soup_data, search_tag=search_tag,
-                         attribute=attribute, old_link=link,
-                         new_link=resource_path_to_file)
+            change_links(soup_data, search_tag,
+                         attribute, resource_path_to_file)
+            print(search_tag)
             bar.next()
-            sleep(1)
 
         except Exception as error:
             logger_error.error(error)
             print(f'Link {link} not downloaded: {error}')
+          
     bar.finish()
     soup_data = soup_data.prettify()
     save_to_file(main_file_name, soup_data)
