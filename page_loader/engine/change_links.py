@@ -21,20 +21,6 @@ def is_same_domain(link, url):
 
 
 def get_links_for_download(url, soup_data):
-    # def get_link_to_file(search_tag, attribute):
-
-    #     tags = soup_data.find_all(search_tag)
-
-    #     for tag in tags:
-    #         try:
-    #             link = tag[attribute]
-    #             if is_same_domain(link, url):
-    #                 list_links_for_download.append((link, search_tag,
-    #                                                 attribute))
-    #         except KeyError:
-    #             logger_error.error('The link is not downloaded because page '
-    #                                'loader '
-    #                                'does not support empty attributes')
 
     list_links_for_download = []
 
