@@ -16,9 +16,6 @@ logger_error.setLevel(logging.DEBUG)
 ch = logging.StreamHandler(stream=sys.stdout)
 ch_error = logging.StreamHandler()
 
-ch.setLevel(logging.INFO)
-ch_error.setLevel(logging.ERROR)
-
 # create formatter
 formatter = logging.Formatter(datefmt=DATE_FORMAT, fmt=LOG_FORMAT)
 

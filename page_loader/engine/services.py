@@ -12,7 +12,7 @@ def get_content(url):
     :return: Content of the Internet page.
     """
     try:
-        response = requests.get(url, timeout=3)
+        response = requests.get(url, timeout=5)
         response.raise_for_status()
     except requests.exceptions.ConnectTimeout:
         logger_error.error(f'Failed to establish a connection to site: {url}\n'

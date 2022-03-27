@@ -31,12 +31,17 @@ def download(url, path):
 
     for link, search_tag, attribute in links_for_download:
         new_link = urljoin(url, link)
+
         resource_file_name = download_content(new_link,
                                               folder_for_download)
+        logger.info(
+            f'The link {link} in the Tag {search_tag} has been changed to '
+            f'{resource_file_name}')
         resource_folder_name = os.path.basename(folder_for_download)
         resource_path_to_file = os.path.join(resource_folder_name,
                                              resource_file_name)
         change_links(search_tag, attribute, resource_path_to_file)
+
         bar.next()
 
     bar.finish()
