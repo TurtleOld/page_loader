@@ -41,9 +41,9 @@
 
 ## Demonstration of capabilities of this package
 
-### The first step of project
+### The main work of the program
 
-[![asciicast](https://asciinema.org/a/463676.svg)](https://asciinema.org/a/463676)
+[![asciicast](https://asciinema.org/a/481021.svg)](https://asciinema.org/a/481021)
 
-В случае ошибок в написании пути или ссылки будут выводиться соответствующие предупреждения:
-[![asciicast](https://asciinema.org/a/467761.svg)](https://asciinema.org/a/467761)
+### In case of errors in the spelling of the path or link, appropriate warnings will be displayed:
+[![asciicast](https://asciinema.org/a/481022.svg)](https://asciinema.org/a/481022)
