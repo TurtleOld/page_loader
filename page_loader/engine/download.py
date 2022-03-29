@@ -34,7 +34,7 @@ def download(url, path):
 
         resource_file_name = download_content(new_link,
                                               folder_for_download)
-        logger.info(
+        print(
             f'The link {link} in the Tag {search_tag} has been changed to '
             f'{resource_file_name}')
         resource_folder_name = os.path.basename(folder_for_download)
