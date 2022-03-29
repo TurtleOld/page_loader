@@ -4,8 +4,8 @@ from urllib.parse import urljoin
 from bs4 import BeautifulSoup
 from progress.bar import PixelBar
 
-from page_loader.engine.change_links import change_links, get_links_for_download
 from page_loader.engine.download_content import download_content
+from page_loader.engine.links import change_link, get_links_for_download
 from page_loader.engine.logger_config import logger
 from page_loader.engine.services import get_content
 from page_loader.engine.services import save_to_file
@@ -40,7 +40,7 @@ def download(url, path):
         resource_folder_name = os.path.basename(folder_for_download)
         resource_path_to_file = os.path.join(resource_folder_name,
                                              resource_file_name)
-        change_links(search_tag, attribute, resource_path_to_file)
+        change_link(search_tag, attribute, resource_path_to_file)
 
         bar.next()
 
