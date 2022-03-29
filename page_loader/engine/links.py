@@ -27,6 +27,7 @@ def get_links_for_download(url, soup_data):
     for tag in soup_data.find_all(TAGS_ATTRIBUTES.keys()):
         try:
             attribute = ''
+            print(tag.name)
             link = tag[TAGS_ATTRIBUTES[tag.name]]
             if is_same_domain(link, url):
                 list_links_for_download.append((link, tag, attribute))

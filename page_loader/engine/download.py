@@ -34,9 +34,8 @@ def download(url, path):
 
         resource_file_name = download_content(new_link,
                                               folder_for_download)
-        print(
-            f'The link {link} in the Tag {search_tag} has been changed to '
-            f'{resource_file_name}')
+        print(f'The link {link} in the Tag {search_tag} has been changed to '
+              f'{resource_file_name}')
         resource_folder_name = os.path.basename(folder_for_download)
         resource_path_to_file = os.path.join(resource_folder_name,
                                              resource_file_name)
