@@ -13,7 +13,7 @@ def main():
         args = parse_cli_arguments()
         file_path = download(args.url, args.output)
         print(f"Page was successfully downloaded into '{file_path}'")
-        sys.exit(0)
+
     except PermissionError as error:
         print(f'Permission denied to the specified directory: '
               f'{error.filename}')
