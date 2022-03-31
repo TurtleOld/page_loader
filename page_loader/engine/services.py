@@ -17,7 +17,7 @@ def get_content(url):
     except requests.exceptions.ConnectTimeout:
         logger_error.error(f'Failed to establish a connection to site: {url}\n'
                            f'Response timeout expired')
-        raise requests.exceptions.ConnectionError(
+        raise requests.exceptions.ConnectTimeout(
             f'Failed to establish a connection to site: {url}\n'
             f'Response timeout expired'
         )
@@ -52,6 +52,8 @@ def get_content(url):
             f'Other request exceptions occurred'
         )
     else:
+        return response.content
+    finally:
         return response.content
 
 
