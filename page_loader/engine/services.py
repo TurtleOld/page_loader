@@ -61,7 +61,7 @@ def save_to_file(path_to_file, data):
     :param path_to_file: Path to file.
     :param data: File Contents.
     """
-    format_file = 'wb'
+    format_file = 'w'
     if isinstance(data, bytes):
         format_file = 'wb'
     with open(path_to_file, format_file) as file_name:
