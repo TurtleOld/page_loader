@@ -28,11 +28,10 @@ def main():
         print(str(key_error))
 
     except requests.exceptions.ConnectionError:
-        print('The server has not issued a response for timeout 5 seconds')
-    finally:
-        args = parse_cli_arguments()
-        file_path = download(args.url, args.output)
-        print(f"Page was successfully downloaded into '{file_path}'")
+        logger_error.error(f'Failed to establish a connection to site: '
+                           f'{parse_cli_arguments().url}\n'
+                           f'Please check your a connection to Ethernet '
+                           f'or address site')
 
 
 if __name__ == '__main__':

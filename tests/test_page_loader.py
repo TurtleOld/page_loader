@@ -2,7 +2,7 @@ import os
 
 import pytest
 from requests.exceptions import HTTPError, ConnectionError, \
-    RequestException, TooManyRedirects, ConnectTimeout
+    TooManyRedirects, ConnectTimeout
 
 from page_loader import download
 
@@ -78,8 +78,6 @@ expected = [
                       f'or address site'),
     (TooManyRedirects, f'Failed to establish a connection to site: {URL}\n'
                        f'Too many redirects'),
-    (RequestException, f'Failed to establish a connection to site: {URL}\n'
-                       f'Other request exceptions occurred'),
 ]
 
 
