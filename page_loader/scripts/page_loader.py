@@ -1,4 +1,5 @@
 # ! /usr/bin/env python
+import requests.exceptions
 
 from page_loader import download
 from page_loader.engine.logger_config import logger_error
@@ -26,8 +27,12 @@ def main():
     except KeyError as key_error:
         print(str(key_error))
 
-    except Exception as exception:
-        print(str(exception))
+    except requests.exceptions.ConnectionError:
+        print('The server has not issued a response for timeout 5 seconds')
+    finally:
+        args = parse_cli_arguments()
+        file_path = download(args.url, args.output)
+        print(f"Page was successfully downloaded into '{file_path}'")
 
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ def get_content(url):
     :return: Content of the Internet page.
     """
     try:
-        response = requests.get(url, timeout=5)
+        response = requests.get(url)
         response.raise_for_status()
     except requests.exceptions.ConnectTimeout:
         logger_error.error(f'Failed to establish a connection to site: {url}\n'
@@ -21,7 +21,11 @@ def get_content(url):
             f'Failed to establish a connection to site: {url}\n'
             f'Response timeout expired'
         )
-
+    except requests.exceptions.Timeout:
+        logger_error.error('The server has not issued a '
+                           'response for timeout 5 seconds')
+        raise requests.exceptions.Timeout('The server has not issued a '
+                                          'response for timeout 5 seconds')
     except requests.exceptions.TooManyRedirects:
         logger_error.error(f'Failed to establish a connection to site: {url}\n'
                            f'Too many redirects')
@@ -44,16 +48,10 @@ def get_content(url):
             f'Failed to establish a connection to site: {url}\n'
             f'Please check your a connection to Ethernet or address site'
         )
-    except requests.exceptions.RequestException:
-        logger_error.error(f'Failed to establish a connection to site: {url}\n'
-                           f'Other request exceptions occurred')
-        raise requests.exceptions.RequestException(
-            f'Failed to establish a connection to site: {url}\n'
-            f'Other request exceptions occurred'
-        )
     else:
         return response.content
     finally:
+        response = requests.get(url)
         return response.content
 
 
@@ -63,7 +61,7 @@ def save_to_file(path_to_file, data):
     :param path_to_file: Path to file.
     :param data: File Contents.
     """
-    format_file = 'w'
+    format_file = 'wb'
     if isinstance(data, bytes):
         format_file = 'wb'
     with open(path_to_file, format_file) as file_name:
