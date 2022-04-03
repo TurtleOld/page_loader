@@ -1,12 +1,13 @@
 import os
 from urllib.parse import urljoin
 
+import requests
 from bs4 import BeautifulSoup
 from progress.bar import PixelBar
 
 from page_loader.engine.download_content import download_content
 from page_loader.engine.links import change_link, get_links_for_download
-from page_loader.engine.logger_config import logger
+from page_loader.engine.logger_config import logger, logger_error
 from page_loader.engine.services import get_content
 from page_loader.engine.services import save_to_file
 from page_loader.engine.url import get_new_name_link, get_name_folder
@@ -30,16 +31,24 @@ def download(url, path):
                    suffix='%(percent)d%%\n\n')
 
     for link, search_tag, attribute in links_for_download:
-        new_link = urljoin(url, link)
+        try:
 
-        resource_file_name = download_content(new_link,
-                                              folder_for_download)
-        resource_folder_name = os.path.basename(folder_for_download)
-        resource_path_to_file = os.path.join(resource_folder_name,
-                                             resource_file_name)
-        change_link(search_tag, attribute, resource_path_to_file)
+            new_link = urljoin(url, link)
 
-        bar.next()
+            resource_file_name = download_content(new_link,
+                                                  folder_for_download)
+            resource_folder_name = os.path.basename(folder_for_download)
+            resource_path_to_file = os.path.join(resource_folder_name,
+                                                 resource_file_name)
+            change_link(search_tag, attribute, resource_path_to_file)
+
+            bar.next()
+        except requests.exceptions.Timeout as timeout_error:
+            logger_error.warning(timeout_error)
+        except requests.exceptions.HTTPError as http_error:
+            logger_error.warning(http_error)
+        except requests.exceptions.ConnectionError as conn_error:
+            logger_error.warning(conn_error)
 
     bar.finish()
 

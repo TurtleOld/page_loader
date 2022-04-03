@@ -50,9 +50,6 @@ def get_content(url):
         )
     else:
         return response.content
-    # finally:
-    #     response = requests.get(url)
-    #     return response.content
 
 
 def save_to_file(path_to_file, data):
@@ -62,8 +59,10 @@ def save_to_file(path_to_file, data):
     :param data: File Contents.
     """
     format_file = 'w'
+    encoding = 'utf-8'
     if isinstance(data, bytes):
         format_file = 'wb'
-    with open(path_to_file, format_file) as file_name:
+        encoding = None
+    with open(path_to_file, format_file, encoding=encoding) as file_name:
         file_name.write(data)
     logger.info(f'Link {os.path.basename(file_name.name)} is downloaded')
